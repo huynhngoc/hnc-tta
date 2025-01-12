@@ -21,8 +21,8 @@ if __name__ == '__main__':
         raise RuntimeError("GPU Unavailable")
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("name")
     parser.add_argument("config")
+    parser.add_argument("name")
     parser.add_argument("--iter", default=1, type=int)
 
     args, unknown = parser.parse_known_args()
