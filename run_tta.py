@@ -11,7 +11,7 @@ import json
 
 def augment_image(image, preprocessors):
     for preprocessor in preprocessors:
-        image = preprocessor.transform(image)
+        image = preprocessor.transform(image, None)
     return image
 
 
