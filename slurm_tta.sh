@@ -35,4 +35,4 @@ echo "Finished seting up files."
 # export RAY_ROOT=$TMPDIR/ray
 export MAX_SAVE_STEP_GB=0
 # rm -rf $TMPDIR/ray/*
-singularity exec --nv deoxys.sif python -u run_tta.py $1 $PROJECTS/ngoc/segmentation --iter $SLURM_ARRAY_TASK_ID
+singularity exec --nv deoxys.sif python -u run_tta.py $1 $PROJECTS/ngoc/segmentation/$2 --iter $SLURM_ARRAY_TASK_ID
