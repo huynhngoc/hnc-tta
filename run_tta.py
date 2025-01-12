@@ -26,7 +26,7 @@ if __name__ == '__main__':
     parser.add_argument("--iter", default=1, type=int)
 
     args, unknown = parser.parse_known_args()
-    base_path = '../results' + args.name
+    base_path = '../results/' + args.name
     with open(args.config, 'r') as file:
         config = json.load(file)
     iter = args.iter
