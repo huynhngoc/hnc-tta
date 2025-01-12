@@ -34,7 +34,7 @@ if __name__ == '__main__':
     for pp_config in config:
         preprocessors.append(preprocessor_from_config(pp_config))
 
-    print('Base_path:', args.source)
+    print('Base_path:', base_path)
     print('Augmentation from:', args.name)
     print('Iteration:', iter)
 
