@@ -4,7 +4,7 @@
 #SBATCH --job-name=uncertainty   # sensible name for the job
 #SBATCH --mem=64G                 # Default memory per CPU is 3GB.
 #SBATCH --partition=hugemem # Use the verysmallmem-partition for jobs requiring < 10 GB RAM.
-#SBATCH --mail-user=ngochuyn@nmbu.no # Email me when job is done.
+#SBATCH --mail-user=anine.lome@nmbu.no # Email me when job is done.
 #SBATCH --mail-type=FAIL
 #SBATCH --output=outputs/uncertainty-analysis-%A-%a.out
 #SBATCH --error=outputs/uncertainty-analysis-%A-%a.out
@@ -34,7 +34,7 @@ echo "Finished seting up files."
 export RAY_ROOT=$TMPDIR/ray
 export MAX_SAVE_STEP_GB=0
 rm -rf $TMPDIR/ray/*
-singularity exec --nv deoxys-2023-feb-fixed.sif python -u run_uncertainty_analysis.py $1 $PROJECTS/ngoc/segmentation --dropout_rate $2 --num_mc $SLURM_ARRAY_TASK_ID
+singularity exec --nv deoxys.sif python -u run_uncertainty_analysis.py $1 --num_tta $SLURM_ARRAY_TASK_ID
 
 # echo "Finished training. Post-processing results"
 
