@@ -103,6 +103,8 @@ if __name__ == '__main__':
         os.makedirs(base_path + '/OUS_uncertainty_map')
     if not os.path.exists(base_path + f'/OUS_uncertainty_map/{num_tta:02d}'):
         os.makedirs(base_path + f'/OUS_uncertainty_map/{num_tta:02d}')
+    if not os.path.exists(base_path + '/OUS_analysis'):
+        os.makedirs(base_path + '/OUS_analysis')
 
     ous_df = pd.read_csv(ous_csv)
 
@@ -183,6 +185,8 @@ if __name__ == '__main__':
         os.makedirs(base_path + '/MAASTRO_uncertainty_map')
     if not os.path.exists(base_path + f'/MAASTRO_uncertainty_map/{num_tta:02d}'):
         os.makedirs(base_path + f'/MAASTRO_uncertainty_map/{num_tta:02d}')
+    if not os.path.exists(base_path + '/MAASTRO_analysis'):
+        os.makedirs(base_path + '/MAASTRO_analysis')
 
     maastro_df = pd.read_csv(maastro_csv)
 
