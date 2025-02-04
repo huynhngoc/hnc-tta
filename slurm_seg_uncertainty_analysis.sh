@@ -3,7 +3,7 @@
 #SBATCH --nodes=1                # Use 1 node
 #SBATCH --job-name=uncertainty   # sensible name for the job
 #SBATCH --mem=64G                 # Default memory per CPU is 3GB.
-#SBATCH --partition=hugemem # Use the verysmallmem-partition for jobs requiring < 10 GB RAM.
+#SBATCH --partition=smallmem # Use the verysmallmem-partition for jobs requiring < 10 GB RAM.
 #SBATCH --mail-user=anine.lome@nmbu.no # Email me when job is done.
 #SBATCH --mail-type=FAIL
 #SBATCH --output=outputs/uncertainty-analysis-%A-%a.out
