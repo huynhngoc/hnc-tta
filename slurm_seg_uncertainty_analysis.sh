@@ -19,7 +19,7 @@ module load singularity
 ## Code
 # If data files aren't copied, do so
 #!/bin/bash
-if [ $# -lt 2 ];
+if [ $# -lt 1 ];
     then
     printf "Not enough arguments - %d\n" $#
     exit 0
