@@ -111,7 +111,7 @@ if __name__ == '__main__':
     iou_info = []
     vol_info = []
     print('Working on OUS.....')
-    for pid in ous_df.pid:
+    for pid in ous_df.patient_idx:
         print('PID:', pid)
         # with h5py.File(ous_h5, 'r') as f:
         #     y_true = f['y'][str(pid)][:]
