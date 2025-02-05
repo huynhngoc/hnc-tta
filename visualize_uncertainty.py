@@ -38,7 +38,7 @@ slice_index = uncertainty_map.shape[2] // 2
 slice_data = uncertainty_map[:, :, slice_index]
 
 # Visualize the slice
-plt.imshow(slice_data, cmap='hot')
+plt.imshow(slice_data, cmap='hot_r')
 plt.colorbar(label='Entropy')
 plt.title(f'Uncertainty Map Slice for PID: {pid}')
 plt.xlabel('X-axis')
