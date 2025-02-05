@@ -5,15 +5,15 @@ import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument("name")
-parser.add_argument("pid")
 parser.add_argument("num_tta", type=int)
+parser.add_argument("pid")
 
 args, unknown = parser.parse_known_args()
 
 # Define the base path and pid
 base_path = '../analysis/' + args.name
-pid = args.pid
 num_tta = args.num_tta  
+pid = args.pid
 
 """
 if not os.path.exists(base_path + '/OUS_uncertainty_map_visualization'):
@@ -39,7 +39,7 @@ slice_data = uncertainty_map[:, :, slice_index]
 
 # Visualize the slice
 plt.imshow(slice_data, cmap='hot')
-plt.colorbar(label='Uncertainty')
+plt.colorbar(label='Entropy')
 plt.title(f'Uncertainty Map Slice for PID: {pid}')
 plt.xlabel('X-axis')
 plt.ylabel('Y-axis')
