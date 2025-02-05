@@ -232,13 +232,13 @@ if __name__ == '__main__':
 
                 dice_info.append({
                     'pid': pid,
-                    'mc_idx': f'{i}_{j}',
+                    'tta_idx': f'{i}_{j}',
                     'dice': f1_score((prob > 0.5).astype(float),
                                      (prob_2 > 0.5).astype(float))
                 })
                 dice_info.append({
                     'pid': pid,
-                    'mc_idx': f'{j}_{i}',
+                    'tta_idx': f'{j}_{i}',
                     'dice': f1_score((prob_2 > 0.5).astype(float),
                                      (prob > 0.5).astype(float))
                 })
