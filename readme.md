@@ -26,6 +26,10 @@ Use this to test your code before committing on your local PC.
 Remember to `exit` the session (twice) after you finish.
 Note that a `qlogin` session will stop automatically after a while.
 
+'''
+qlogin --partition gpu --gres gpu:1 --mem 16G
+'''
+
 # Running tta
 ```
 sbatch --array=1-20%2 slurm_tta.sh config/tta/noise_aug.json noise_aug

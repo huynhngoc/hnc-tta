@@ -5,7 +5,7 @@
 #SBATCH --mem=64G                 # Default memory per CPU is 3GB.
 #SBATCH --partition=gpu # Use the verysmallmem-partition for jobs requiring < 10 GB RAM.
 #SBATCH --gres=gpu:1
-#SBATCH --mail-user=$USER@nmbu.no # Email me when job is done.
+#SBATCH --mail-user=anine.lome@nmbu.no # Email me when job is done.
 #SBATCH --mail-type=FAIL
 #SBATCH --output=outputs/tta-%A-%a.out
 #SBATCH --error=outputs/tta-%A-%a.out

@@ -64,29 +64,35 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument("name")
-    parser.add_argument("source")
-    parser.add_argument("--num_mc", default=1, type=int)
-    parser.add_argument("--dropout_rate", default=10, type=int)
+    #parser.add_argument("source")
+    parser.add_argument("--num_tta", default=1, type=int)
+    #parser.add_argument("--dropout_rate", default=10, type=int)
 
     args, unknown = parser.parse_known_args()
 
-    base_path = args.source + '/' + args.name + f'_{args.dropout_rate:02d}'
-    num_mc = args.num_mc
+    #base_path = args.source + '/' + args.name + f'_{args.dropout_rate:02d}'
+    base_path = '../analysis/' + args.name
+    num_tta = args.num_tta
 
-    print('Base_path:', args.source)
+    print('Base_path:', base_path)
     print('Original model:', args.name)
-    print('Dropout rate:', args.dropout_rate)
-    print('Number of samples:', num_mc)
+    #print('Dropout rate:', args.dropout_rate)
+    print('Number of samples:', num_tta)
 
     if not os.path.exists(base_path):
         os.makedirs(base_path)
 
-    ous_h5 = args.source + '/' + args.name + '/ous_test.h5'
-    ous_csv = args.source + '/' + args.name + '/ous_original_results.csv'
-    maastro_h5 = args.source + '/' + args.name + '/maastro_full.h5'
-    maastro_csv = args.source + '/' + args.name + '/maastro_original_results.csv'
+    #ous_h5 = args.source + '/' + args.name + '/ous_test.h5'
+    #ous_csv = args.source + '/' + args.name + '/ous_original_results.csv'
+    #maastro_h5 = args.source + '/' + args.name + '/maastro_full.h5'
+    #maastro_csv = args.source + '/' + args.name + '/maastro_original_results.csv'
     # model_file = args.source + '/' + args.name + '/model.h5'
 
+    ous_h5 = '../segmentation/ous_test.h5'
+    ous_csv = '../segmentation/ous_test.csv'
+    maastro_h5 = '../segmentation/maastro_full.h5'
+    maastro_csv = '../segmentation/maastro_full.csv'
+    
     # NOTE: exclude patient 5 from MAASTRO set
     # data = data[data.patient_idx != 5]
 
@@ -95,8 +101,10 @@ if __name__ == '__main__':
 
     if not os.path.exists(base_path + '/OUS_uncertainty_map'):
         os.makedirs(base_path + '/OUS_uncertainty_map')
-    if not os.path.exists(base_path + f'/OUS_uncertainty_map/{num_mc:02d}'):
-        os.makedirs(base_path + f'/OUS_uncertainty_map/{num_mc:02d}')
+    if not os.path.exists(base_path + f'/OUS_uncertainty_map/{num_tta:02d}'):
+        os.makedirs(base_path + f'/OUS_uncertainty_map/{num_tta:02d}')
+    if not os.path.exists(base_path + '/OUS_analysis'):
+        os.makedirs(base_path + '/OUS_analysis')
 
     ous_df = pd.read_csv(ous_csv)
 
@@ -105,16 +113,16 @@ if __name__ == '__main__':
     iou_info = []
     vol_info = []
     print('Working on OUS.....')
-    for pid in ous_df.pid:
+    for pid in ous_df.patient_idx:
         print('PID:', pid)
         # with h5py.File(ous_h5, 'r') as f:
         #     y_true = f['y'][str(pid)][:]
         y_pred = []
         intersection = None
         union = None
-        for i in range(1, num_mc + 1):
-            print('mc_idx:', i)
-            with open(base_path + f'/OUS/{pid}/{i:02d}.npy', 'rb') as f:
+        for i in range(1, num_tta + 1):
+            print('tta_idx:', i)
+            with open('../results/' + args.name + f'/OUS/{pid}/{i:02d}.npy', 'rb') as f:
                 prob = np.load(f)
             # entropy map
             y_pred.append(prob)
@@ -128,27 +136,27 @@ if __name__ == '__main__':
             # vol
             vol_info.append({
                 'pid': pid,
-                'mc_idx': i,
+                'tta_idx': i,
                 'predicted_vol': (prob > 0.5).sum()
             })
 
             # cross dice score
-            for j in range(i + 1, num_mc + 1):
+            for j in range(i + 1, num_tta + 1):
                 if i == j:
                     continue
-                print('mc_idx cross:', j)
-                with open(base_path + f'/OUS/{pid}/{j:02d}.npy', 'rb') as f:
+                print('tta_idx cross:', j)
+                with open('../results/' + args.name + f'/OUS/{pid}/{j:02d}.npy', 'rb') as f:
                     prob_2 = np.load(f)
 
                 dice_info.append({
                     'pid': pid,
-                    'mc_idx': f'{i}_{j}',
+                    'tta_idx': f'{i}_{j}',
                     'dice': f1_score((prob > 0.5).astype(float),
                                      (prob_2 > 0.5).astype(float))
                 })
                 dice_info.append({
                     'pid': pid,
-                    'mc_idx': f'{j}_{i}',
+                    'tta_idx': f'{j}_{i}',
                     'dice': f1_score((prob_2 > 0.5).astype(float),
                                      (prob > 0.5).astype(float))
                 })
@@ -160,23 +168,25 @@ if __name__ == '__main__':
 
         y_pred = np.stack(y_pred, axis=0).mean(axis=0)
         uncertainty_map = - y_pred * np.log(y_pred)
-        with open(base_path + f'/OUS_uncertainty_map/{num_mc:02d}/{pid}.npy', 'wb') as f:
+        with open(base_path + f'/OUS_uncertainty_map/{num_tta:02d}/{pid}.npy', 'wb') as f:
             np.save(f, uncertainty_map)
 
     pd.DataFrame(iou_info).to_csv(
-        base_path + f'/OUS_analysis/iou_{num_mc:02d}.csv', index=False
+        base_path + f'/OUS_analysis/iou_{num_tta:02d}.csv', index=False
     )
     pd.DataFrame(vol_info).to_csv(
-        base_path + f'/OUS_analysis/vol_{num_mc:02d}.csv', index=False
+        base_path + f'/OUS_analysis/vol_{num_tta:02d}.csv', index=False
     )
     pd.DataFrame(dice_info).to_csv(
-        base_path + f'/OUS_analysis/dice_{num_mc:02d}.csv', index=False
+        base_path + f'/OUS_analysis/dice_{num_tta:02d}.csv', index=False
     )
 
     if not os.path.exists(base_path + '/MAASTRO_uncertainty_map'):
         os.makedirs(base_path + '/MAASTRO_uncertainty_map')
-    if not os.path.exists(base_path + f'/MAASTRO_uncertainty_map/{num_mc:02d}'):
-        os.makedirs(base_path + f'/MAASTRO_uncertainty_map/{num_mc:02d}')
+    if not os.path.exists(base_path + f'/MAASTRO_uncertainty_map/{num_tta:02d}'):
+        os.makedirs(base_path + f'/MAASTRO_uncertainty_map/{num_tta:02d}')
+    if not os.path.exists(base_path + '/MAASTRO_analysis'):
+        os.makedirs(base_path + '/MAASTRO_analysis')
 
     maastro_df = pd.read_csv(maastro_csv)
 
@@ -185,16 +195,16 @@ if __name__ == '__main__':
     iou_info = []
     vol_info = []
     print('Working on MAASTRO.....')
-    for pid in maastro_df.pid:
+    for pid in maastro_df.patient_idx:
         print('PID:', pid)
         # with h5py.File(maastro_h5, 'r') as f:
         #     y_true = f['y'][str(pid)][:]
         y_pred = []
         intersection = None
         union = None
-        for i in range(1, num_mc + 1):
-            print('mc_idx:', i)
-            with open(base_path + f'/MAASTRO/{pid}/{i:02d}.npy', 'rb') as f:
+        for i in range(1, num_tta + 1):
+            print('tta_idx:', i)
+            with open('../results/' + args.name + f'/MAASTRO/{pid}/{i:02d}.npy', 'rb') as f:
                 prob = np.load(f)
             # entropy map
             y_pred.append(prob)
@@ -208,16 +218,16 @@ if __name__ == '__main__':
             # vol
             vol_info.append({
                 'pid': pid,
-                'mc_idx': i,
+                'tta_idx': i,
                 'predicted_vol': (prob > 0.5).sum()
             })
 
             # cross dice score
-            for j in range(i + 1, num_mc + 1):
+            for j in range(i + 1, num_tta + 1):
                 if i == j:
                     continue
-                print('mc_idx cross:', j)
-                with open(base_path + f'/MAASTRO/{pid}/{j:02d}.npy', 'rb') as f:
+                print('tta_idx cross:', j)
+                with open('../results/' + args.name + f'/MAASTRO/{pid}/{j:02d}.npy', 'rb') as f:
                     prob_2 = np.load(f)
 
                 dice_info.append({
@@ -240,15 +250,15 @@ if __name__ == '__main__':
 
         y_pred = np.stack(y_pred, axis=0).mean(axis=0)
         uncertainty_map = - y_pred * np.log(y_pred)
-        with open(base_path + f'/MAASTRO_uncertainty_map/{num_mc:02d}/{pid}.npy', 'wb') as f:
+        with open(base_path + f'/MAASTRO_uncertainty_map/{num_tta:02d}/{pid}.npy', 'wb') as f:
             np.save(f, uncertainty_map)
 
     pd.DataFrame(iou_info).to_csv(
-        base_path + f'/MAASTRO_analysis/iou_{num_mc:02d}.csv', index=False
+        base_path + f'/MAASTRO_analysis/iou_{num_tta:02d}.csv', index=False
     )
     pd.DataFrame(vol_info).to_csv(
-        base_path + f'/MAASTRO_analysis/vol_{num_mc:02d}.csv', index=False
+        base_path + f'/MAASTRO_analysis/vol_{num_tta:02d}.csv', index=False
     )
     pd.DataFrame(dice_info).to_csv(
-        base_path + f'/MAASTRO_analysis/dice_{num_mc:02d}.csv', index=False
+        base_path + f'/MAASTRO_analysis/dice_{num_tta:02d}.csv', index=False
     )

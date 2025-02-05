@@ -2,12 +2,12 @@
 #SBATCH --ntasks=1               # 1 core(CPU)
 #SBATCH --nodes=1                # Use 1 node
 #SBATCH --job-name=uncertainty   # sensible name for the job
-#SBATCH --mem=64G                 # Default memory per CPU is 3GB.
+#SBATCH --mem=1G                 # Default memory per CPU is 3GB.
 #SBATCH --partition=smallmem # Use the verysmallmem-partition for jobs requiring < 10 GB RAM.
 #SBATCH --mail-user=anine.lome@nmbu.no # Email me when job is done.
 #SBATCH --mail-type=FAIL
-#SBATCH --output=outputs/uncertainty-analysis-%A-%a.out
-#SBATCH --error=outputs/uncertainty-analysis-%A-%a.out
+#SBATCH --output=outputs/uncertainty-visualize-%A-%a.out
+#SBATCH --error=outputs/uncertainty-visualize-%A-%a.out
 #SBATCH --input=inputs/all-no.in
 
 # If you would like to use more please adjust this.
@@ -19,7 +19,7 @@ module load singularity
 ## Code
 # If data files aren't copied, do so
 #!/bin/bash
-if [ $# -lt 1 ];
+if [ $# -lt 3 ];
     then
     printf "Not enough arguments - %d\n" $#
     exit 0
@@ -34,7 +34,7 @@ echo "Finished seting up files."
 export RAY_ROOT=$TMPDIR/ray
 export MAX_SAVE_STEP_GB=0
 rm -rf $TMPDIR/ray/*
-singularity exec --nv deoxys.sif python -u run_uncertainty_analysis.py $1 --num_tta $SLURM_ARRAY_TASK_ID
+singularity exec --nv deoxys.sif python -u visualize_uncertainty.py $1 $2 $3
 
 # echo "Finished training. Post-processing results"
 
