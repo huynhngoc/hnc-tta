@@ -31,8 +31,11 @@ qlogin --partition gpu --gres gpu:1 --mem 16G
 '''
 
 # Running tta
+```
 sbatch --array=1-20%2 slurm_tta.sh config/tta/noise_aug.json noise_aug
+```
 
+It will run an array job with 20 runs, with no more than 2 runs running on Orion at the same time.
 
 # Running a python file
 ```
