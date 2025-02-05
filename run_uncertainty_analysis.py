@@ -204,7 +204,7 @@ if __name__ == '__main__':
         union = None
         for i in range(1, num_tta + 1):
             print('tta_idx:', i)
-            with open(base_path + f'/MAASTRO/{pid}/{i:02d}.npy', 'rb') as f:
+            with open('../results/' + args.name + f'/MAASTRO/{pid}/{i:02d}.npy', 'rb') as f:
                 prob = np.load(f)
             # entropy map
             y_pred.append(prob)
@@ -227,7 +227,7 @@ if __name__ == '__main__':
                 if i == j:
                     continue
                 print('tta_idx cross:', j)
-                with open(base_path + f'/MAASTRO/{pid}/{j:02d}.npy', 'rb') as f:
+                with open('../results/' + args.name + f'/MAASTRO/{pid}/{j:02d}.npy', 'rb') as f:
                     prob_2 = np.load(f)
 
                 dice_info.append({
