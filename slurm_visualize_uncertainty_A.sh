@@ -19,13 +19,13 @@ module load singularity
 ## Code
 # If data files aren't copied, do so
 #!/bin/bash
-#if [ $# -lt 3 ];
-    #then
-    #printf "Not enough arguments - %d\n" $#
-    #exit 0
-    #fi
+if [ $# -lt 3 ];
+    then
+    printf "Not enough arguments - %d\n" $#
+    exit 0
+    fi
 
-#echo "Finished seting up files."
+echo "Finished seting up files."
 
 
 # Run experiment
@@ -34,7 +34,7 @@ module load singularity
 export RAY_ROOT=$TMPDIR/ray
 export MAX_SAVE_STEP_GB=0
 rm -rf $TMPDIR/ray/*
-singularity exec --nv deoxys.sif python -u visualize_uncertainty.py
+singularity exec --nv deoxys.sif python -u visualize_uncertainty.py $1 $2 $3
 
 # echo "Finished training. Post-processing results"
 
