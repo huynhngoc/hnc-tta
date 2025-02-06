@@ -14,7 +14,20 @@ import h5py
 import os
 #import pingouin as pg
 #import seaborn as sns
-from medvis import apply_cmap_with_blend
+#from medvis import apply_cmap_with_blend
+import matplotlib.cm as cm
+ 
+def apply_cmap_with_blend(functional_data, cmap, vmin=None, vmax=None, gamma=1):
+    functional_data = functional_data.astype(float)
+    if vmin is None:
+                    vmin = functional_data.min()
+    if vmax is None:
+                    vmax = functional_data.max()
+    functional_data = (functional_data - vmin) / (vmax - vmin)
+    functional_data = np.minimum(np.maximum(functional_data, 0), 1) ** gamma
+    image = cm.get_cmap(cmap)(functional_data)
+    image[..., -1] = functional_data
+    return image
 
 
 def f1_score(y_true, y_pred, beta=1):
