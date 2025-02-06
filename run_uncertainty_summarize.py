@@ -64,28 +64,33 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument("name")
-    parser.add_argument("source")
+    #parser.add_argument("source")
     parser.add_argument("--iter", default=1, type=int)
-    parser.add_argument("--dropout_rate", default=10, type=int)
+    #parser.add_argument("--dropout_rate", default=10, type=int)
 
     args, unknown = parser.parse_known_args()
 
-    base_path = args.source + '/' + args.name + f'_{args.dropout_rate:02d}'
+    #base_path = args.source + '/' + args.name + f'_{args.dropout_rate:02d}'
+    base_path = '../analysis/' + args.name
     iter = args.iter
 
-    print('Base_path:', args.source)
+    print('Base_path:', base_path)
     print('Original model:', args.name)
-    print('Dropout rate:', args.dropout_rate)
+    #print('Dropout rate:', args.dropout_rate)
     print('Iteration:', iter)
 
     if not os.path.exists(base_path):
         os.makedirs(base_path)
 
-    ous_h5 = args.source + '/' + args.name + '/ous_test.h5'
-    ous_csv = args.source + '/' + args.name + '/ous_test.csv'
-    maastro_h5 = args.source + '/' + args.name + '/maastro_full.h5'
-    maastro_csv = args.source + '/' + args.name + '/maastro_full.csv'
+    #ous_h5 = args.source + '/' + args.name + '/ous_test.h5'
+    #ous_csv = args.source + '/' + args.name + '/ous_test.csv'
+    #maastro_h5 = args.source + '/' + args.name + '/maastro_full.h5'
+    #maastro_csv = args.source + '/' + args.name + '/maastro_full.csv'
     # model_file = args.source + '/' + args.name + '/model.h5'
+    ous_h5 = '../segmentation/ous_test.h5'
+    ous_csv = '../segmentation/ous_test.csv'
+    maastro_h5 = '../segmentation/maastro_full.h5'
+    maastro_csv = '../segmentation/maastro_full.csv'
 
     # NOTE: exclude patient 5 from MAASTRO set
     # data = data[data.patient_idx != 5]
@@ -112,7 +117,7 @@ if __name__ == '__main__':
 
         y_pred = []
         for i in range(1, iter+1):
-            with open(base_path + '/OUS/' + str(pid) + f'/{iter:02d}.npy', 'rb') as f:
+            with open(f'../results/{args.name}/OUS/' + str(pid) + f'/{iter:02d}.npy', 'rb') as f:
                 y_pred.append(np.load(f))
         y_pred = np.stack(y_pred, axis=0).mean(axis=0)
         uncertainty_map = - y_pred * np.log(y_pred)
@@ -166,7 +171,7 @@ if __name__ == '__main__':
 
         y_pred = []
         for i in range(1, iter+1):
-            with open(base_path + '/MAASTRO/' + str(pid) + f'/{iter:02d}.npy', 'rb') as f:
+            with open(f'../results/{args.name}/MAASTRO/' + str(pid) + f'/{iter:02d}.npy', 'rb') as f:
                 y_pred.append(np.load(f))
         y_pred = np.stack(y_pred, axis=0).mean(axis=0)
         uncertainty_map = - y_pred * np.log(y_pred)
