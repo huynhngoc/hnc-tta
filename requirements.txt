@@ -7,3 +7,4 @@ tensorflow-addons
 matplotlib
 numpy
 ray
+medvis
