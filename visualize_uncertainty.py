@@ -80,6 +80,9 @@ def specificity(y_true, y_pred):
 #ous_path = 'P:/REALTEK-HeadNeck-Project/Head-and-Neck/PhDs/Ngoc/Orion/transfer/3d_unet_32_P10_aug_affine'
 #maastro_path = 'P:/REALTEK-HeadNeck-Project/Head-and-Neck/PhDs/Ngoc/Orion/transfer/3d_unet_32_P10_aug_affine_maastro_clinic_3d'
 
+if not os.path.exists('../analysis/noise_aug/OUS_uncertainty_map_visualization'):
+    os.makedirs('../analysis/noise_aug/OUS_uncertainty_map_visualization')
+
 
 class VisualizeUncertaintyMapV2:
     def __init__(self, image, mask, predicted, uncertainty_map, intersection, union):
@@ -346,6 +349,9 @@ num_samples = 15
 patient_id = 16
 uncertainty_map = np.zeros((173, 191, 265, 1))
 
+if not os.path.exists(f'../analysis/noise_aug/OUS_uncertainty_map_visualization/{num_samples:02d}'):
+    os.makedirs(f'../analysis/noise_aug/OUS_uncertainty_map_visualization/{num_samples:02d}')
+
 with open(f'../analysis/noise_aug/OUS_uncertainty_map/{num_samples:02d}/{patient_id}.npy', 'rb') as f:
     uncertainty_map = np.load(f)
 
@@ -373,4 +379,9 @@ for i in range(2, num_samples+1):
 vis = VisualizeUncertaintyMapV2(
     image, y_true, y_pred, uncertainty_map)#, intersection, union)
 vis.start()
+
+# Save the figure to a file
+output_path = f'../analysis/noise_aug/OUS_uncertainty_map_visualization/{num_samples:02d}/pid_{patient_id}.pdf'
+plt.savefig(output_path, format='pdf')
+
 plt.show()
