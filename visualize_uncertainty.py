@@ -3,8 +3,8 @@ from deoxys_image import normalize
 import matplotlib as mpl
 from matplotlib.lines import Line2D
 from matplotlib import colors as mpl_colors
-from spekkhogger.singleblock import PCA
-from statsmodels.stats.diagnostic import normal_ad
+#from spekkhogger.singleblock import PCA
+#from statsmodels.stats.diagnostic import normal_ad
 from scipy import stats
 from matplotlib.widgets import Slider, Button
 from matplotlib import pyplot as plt
@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 import h5py
 import os
-import pingouin as pg
+#import pingouin as pg
 import seaborn as sns
 from medvis import apply_cmap_with_blend
 
