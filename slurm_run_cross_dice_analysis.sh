@@ -4,7 +4,6 @@
 #SBATCH --job-name=CrossDice   # sensible name for the job
 #SBATCH --mem=1G                 # Default memory per CPU is 3GB.
 #SBATCH --partition=smallmem # Use the verysmallmem-partition for jobs requiring < 10 GB RAM.
-#SBATCH --gres=gpu:1
 #SBATCH --mail-user=anine.lome@nmbu.no # Email me when job is done.
 #SBATCH --mail-type=FAIL
 #SBATCH --output=outputs/cross_dice-%A-%a.out
