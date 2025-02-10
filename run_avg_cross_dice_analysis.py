@@ -23,7 +23,7 @@ if __name__ == '__main__':
     transformed_df = pd.DataFrame()
 
     print('Working on OUS.....')
-    for i in range(1, num_tta + 1):
+    for i in range(2, num_tta + 1):
         # Read the original CSV file
         df = pd.read_csv(base_path + f'/OUS_analysis/dice_{i:02d}.csv')
         df.groupby('pid').agg({'dice': 'mean'}).reset_index()
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     print(f"Transformed data saved to {OUS_transformed_path}")
 
     print('Working on MAASTRO.....')
-    for i in range(1, num_tta + 1):
+    for i in range(2, num_tta + 1):
         # Read the original CSV file
         df = pd.read_csv(base_path + f'/MAASTRO_analysis/dice_{i:02d}.csv')
         df.groupby('pid').agg({'dice': 'mean'}).reset_index()
