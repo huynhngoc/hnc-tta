@@ -42,7 +42,7 @@ num_iterations = 5
 
 
 # Create subplots
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 6))
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6, 6))
 
 group1_patient_threshold_index = []
 group2_patient_threshold_index = []
@@ -88,8 +88,8 @@ group2_mean_threshold_index = int(np.mean(group2_patient_threshold_index))
 ax2.axvline(x=num_tta_cols[group2_mean_threshold_index], color='red', linestyle='--', label=f'Average steady state, Difference threshold = {threshold}')
 ax2.legend(loc='lower left')
 
-fig.suptitle('Mean Cross Dice Score vs. Number of TTA for OUS Dataset', fontsize=16)
-plt.tight_layout(rect=[0, 0.03, 1, 0.95])   
+fig.suptitle('OUS Dataset', fontsize=12)
+plt.tight_layout(pad=3)
 
 # Save the plot to a PDF file
 plt.savefig('OUS_Cross_Dice_Groups_steady_state.pdf', format='pdf', bbox_inches='tight')
@@ -121,7 +121,7 @@ group2 = MAASTRO_df[MAASTRO_df['mean_dice_02'] >= MAASTRO_df['mean_dice_05']]
 #group2_threshold_index = find_threshold_index(group2_mean_values, threshold, num_iterations)
 
 # Create subplots
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 6))
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6, 6))
 group1_patient_threshold_index = []
 group2_patient_threshold_index = []
 
@@ -166,8 +166,8 @@ group2_mean_threshold_index = int(np.mean(group2_patient_threshold_index))
 ax2.axvline(x=num_tta_cols[group2_mean_threshold_index], color='red', linestyle='--', label=f'Average steady state, Difference threshold = {threshold}')
 ax2.legend(loc='lower left')
 
-fig.suptitle('Mean Cross Dice Score vs. Number of TTA for MAASTRO Dataset', fontsize=16)
-plt.tight_layout(rect=[0, 0.03, 1, 0.95]) 
+fig.suptitle('MAASTRO Dataset', fontsize=12)
+plt.tight_layout(pad=3) 
 
 # Save the plot to a PDF file
 plt.savefig('MAASTRO_Cross_Dice_Groups_steady_state.pdf', format='pdf', bbox_inches='tight')
