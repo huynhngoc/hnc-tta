@@ -59,6 +59,8 @@ ax1.set_xticklabels(new_x_labels)
 ous_mean_threshold_index = int(np.mean(ous_patient_threshold_index))
 ous_25_percentile_index = int(np.percentile(ous_patient_threshold_index, 25))
 ous_75_percentile_index = int(np.percentile(ous_patient_threshold_index, 75))
+ous_50_percentile_index = int(np.percentile(ous_patient_threshold_index, 50))
+
 print(ous_patient_threshold_index)
 print(ous_mean_threshold_index)
 print(ous_25_percentile_index)
@@ -67,6 +69,7 @@ print(ous_75_percentile_index)
 ax1.axvline(x=num_tta_cols[ous_mean_threshold_index], color='red', linestyle='--', label=f'Average steady state, Difference threshold = {threshold}')
 ax1.axvline(x=num_tta_cols[ous_25_percentile_index], color='green', linestyle='--', label='25th percentile')
 ax1.axvline(x=num_tta_cols[ous_75_percentile_index], color='blue', linestyle='--', label='75th percentile')
+ax1.axvline(x=num_tta_cols[ous_50_percentile_index], color='blue', linestyle='--', label='50th percentile')
 
 # Shade the area between the mean and percentiles
 ax1.axvspan(num_tta_cols[ous_25_percentile_index], num_tta_cols[ous_mean_threshold_index], color='green', alpha=0.1)
