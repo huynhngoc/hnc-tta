@@ -28,7 +28,7 @@ if __name__ == '__main__':
     for i in range(2, num_tta + 1):
         # Read the original CSV file
         ous_df = pd.read_csv(base_path + f'/OUS_analysis/dice_{i:02d}.csv')
-        #ous_df.groupby('pid').agg({'dice': 'mean'}).reset_index()
+        
         # Calculate the mean cross Dice score for each patient
         ous_mean_dice = ous_df.groupby('pid').agg({'dice': 'mean'}).reset_index()
         ous_mean_dice.rename(columns={'dice': f'mean_dice_{i:02d}'}, inplace=True)
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     for i in range(2, num_tta + 1):
         # Read the original CSV file
         MAASTRO_df = pd.read_csv(base_path + f'/MAASTRO_analysis/dice_{i:02d}.csv')
-        MAASTRO_df.groupby('pid').agg({'dice': 'mean'}).reset_index()
+        
         # Calculate the mean cross Dice score for each patient
         MAASTRO_mean_dice = MAASTRO_df.groupby('pid').agg({'dice': 'mean'}).reset_index()
         MAASTRO_mean_dice.rename(columns={'dice': f'mean_dice_{i:02d}'}, inplace=True)
