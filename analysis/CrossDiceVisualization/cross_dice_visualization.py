@@ -20,7 +20,7 @@ new_x_labels = [str(i) for i in range(2, 21)]
 ous_mean_values = ous_df[num_tta_cols].mean()
 
 # Plot the data
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(7, 4))
 
 for pid in patient_ids:
     # Extract the mean cross dice values for the current patient
@@ -83,7 +83,7 @@ num_tta_cols = MAASTRO_df.columns[1:]  # Assuming the first column is 'pid'
 MAASTRO_mean_values = ous_df[num_tta_cols].mean()
 
 # Plot the data
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(7, 4))
 
 for pid in patient_ids:
     # Extract the values for the current patient
