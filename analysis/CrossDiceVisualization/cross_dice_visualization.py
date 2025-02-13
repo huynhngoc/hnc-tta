@@ -25,9 +25,24 @@ plt.figure(figsize=(10, 6))
 for pid in patient_ids:
     # Extract the mean cross dice values for the current patient
     patient_data = ous_df[ous_df['pid'] == pid][num_tta_cols].values.flatten()
+    
+    if ous_df[ous_df['pid'] == pid]['mean_dice_02'].values[0] < 0.4:# and ous_df[ous_df['pid'] == pid]['mean_dice_1'].values[0] > 0.95:
+        print(f'Patient ID: {pid}') # Print the patient ID for a patient with high uncertianty
+        plt.plot(num_tta_cols, patient_data, label=f'Patient ID = {pid}', alpha=1, linewidth=2.5)
+        continue
+    
+    if ous_df[ous_df['pid'] == pid]['mean_dice_02'].values[0] == 1 and ous_df[ous_df['pid'] == pid]['mean_dice_10'].values[0] == 1:
+        print(f'Patient ID: {pid}') # Print the patient ID for a patient with high uncertianty
+        plt.plot(num_tta_cols, patient_data, label=f'Patient ID = {pid}', alpha=1, linewidth=2.5)
+        continue
+
+    if ous_df[ous_df['pid'] == pid]['mean_dice_02'].values[0] > 0.86 and ous_df[ous_df['pid'] == pid]['mean_dice_02'].values[0] < 0.9 and ous_df[ous_df['pid'] == pid]['mean_dice_04'].values[0] < 0.75:
+        print(f'Patient ID: {pid}') # Print the patient ID for a patient with high uncertianty
+        plt.plot(num_tta_cols, patient_data, label=f'Patient ID = {pid}', alpha=1, linewidth=2.5)
+        continue
 
     # Plot the data
-    plt.plot(num_tta_cols, patient_data, alpha=0.3)
+    plt.plot(num_tta_cols, patient_data, alpha=0.2)
 
 # Plot the mean values
 plt.plot(num_tta_cols, ous_mean_values, label='Mean of all patients', color='black', linewidth=2, linestyle='--', alpha=1.0)
@@ -35,7 +50,7 @@ plt.plot(num_tta_cols, ous_mean_values, label='Mean of all patients', color='bla
 # Add labels and title
 plt.xlabel('Number of TTA-predictions')
 plt.ylabel('Mean Cross Dice Score')
-plt.title('Mean Cross Dice Score vs. Number of TTA-predictions for OUS Dataset')
+plt.title('OUS Dataset : Mean Cross Dice Score vs. \n Number of TTA-predictions with example trends')
 plt.legend(loc='lower left')
 
 # Set new x-axis labels
@@ -73,9 +88,23 @@ plt.figure(figsize=(10, 6))
 for pid in patient_ids:
     # Extract the values for the current patient
     patient_data = MAASTRO_df[MAASTRO_df['pid'] == pid][num_tta_cols].values.flatten()
+    if MAASTRO_df[MAASTRO_df['pid'] == pid]['mean_dice_02'].values[0] < 0.05 and MAASTRO_df[MAASTRO_df['pid'] == pid]['mean_dice_03'].values[0] < 0.05:
+        print(f'Patient ID: {pid}') # Print the patient ID for a patient with high uncertianty
+        plt.plot(num_tta_cols, patient_data, label=f'Patient ID = {pid}', alpha=1, linewidth=2.5)
+        continue
     
+    if MAASTRO_df[MAASTRO_df['pid'] == pid]['mean_dice_03'].values[0] > 0.98 and MAASTRO_df[MAASTRO_df['pid'] == pid]['mean_dice_04'].values[0] < 0.52 and MAASTRO_df[MAASTRO_df['pid'] == pid]['mean_dice_20'].values[0] > 0.83:
+        print(f'Patient ID: {pid}') # Print the patient ID for a patient with high uncertianty
+        plt.plot(num_tta_cols, patient_data, label=f'Patient ID = {pid}', alpha=1, linewidth=2.5)
+        continue
+
+    if MAASTRO_df[MAASTRO_df['pid'] == pid]['mean_dice_03'].values[0] > 0.98 and MAASTRO_df[MAASTRO_df['pid'] == pid]['mean_dice_06'].values[0] > 0.98 and MAASTRO_df[MAASTRO_df['pid'] == pid]['mean_dice_20'].values[0] > 0.98:
+        print(f'Patient ID: {pid}') # Print the patient ID for a patient with high uncertianty
+        plt.plot(num_tta_cols, patient_data, label=f'Patient ID = {pid}', alpha=1, linewidth=2.5)
+        continue
+
     # Plot the data
-    plt.plot(num_tta_cols, patient_data, alpha=0.3)
+    plt.plot(num_tta_cols, patient_data, alpha=0.2)
 
 # Plot the mean values
 plt.plot(num_tta_cols, MAASTRO_mean_values, label='Mean of all patients', color='black', linewidth=2, linestyle='--', alpha=1.0)
@@ -83,7 +112,7 @@ plt.plot(num_tta_cols, MAASTRO_mean_values, label='Mean of all patients', color=
 # Add labels and title
 plt.xlabel('Number of TTA')
 plt.ylabel('Mean Cross Dice Score')
-plt.title('Mean Cross Dice Score vs. Number of TTA for MAASTRO Dataset')
+plt.title('MAASTRO Dataset : Mean Cross Dice Score vs. \n Number of TTA-predictions with example trends')
 plt.legend(loc='lower left')
 
 # Set new x-axis labels
