@@ -8,16 +8,17 @@ import pandas as pd
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("name")
+    parser.add_argument("num_tta", default=1, type=int) # Number of TTA predictions to analyze
     parser.add_argument("source")
-    parser.add_argument("--num_tta", default=1, type=int)
+    
     
 
     args, unknown = parser.parse_known_args()
     base_path = args.source + '/analysis/' + args.name 
     num_tta = args.num_tta
 
-    OUS_transformed_path = base_path + '/OUS_analysis/OUS_avg_cross_dice_analysis.csv'
-    MAASTRO_transformed_path = base_path + '/MAASTRO_analysis/MAASTRO_avg_cross_dice_analysis.csv'
+    OUS_transformed_path = args.source + '/hnc-tta/analysis/OUS_avg_cross_dice_analysis.csv'
+    MAASTRO_transformed_path = args.source + '/hnc-tta/analysis/MAASTRO_avg_cross_dice_analysis.csv'
     
     # Initialize an empty DataFrame to store the transformed data
     ous_transformed_df = pd.DataFrame()
@@ -27,7 +28,7 @@ if __name__ == '__main__':
     for i in range(2, num_tta + 1):
         # Read the original CSV file
         ous_df = pd.read_csv(base_path + f'/OUS_analysis/dice_{i:02d}.csv')
-        ous_df.groupby('pid').agg({'dice': 'mean'}).reset_index()
+        #ous_df.groupby('pid').agg({'dice': 'mean'}).reset_index()
         # Calculate the mean cross Dice score for each patient
         ous_mean_dice = ous_df.groupby('pid').agg({'dice': 'mean'}).reset_index()
         ous_mean_dice.rename(columns={'dice': f'mean_dice_{i:02d}'}, inplace=True)
