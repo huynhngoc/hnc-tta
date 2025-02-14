@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 
 print('Working on OUS.....')
 
@@ -57,23 +58,35 @@ ax1.set_xticklabels(new_x_labels)
 # Find mean and percentiles for OUS
 
 ous_mean_threshold_index = int(np.mean(ous_patient_threshold_index))
-ous_25_percentile_index = int(np.percentile(ous_patient_threshold_index, 25))
-ous_75_percentile_index = int(np.percentile(ous_patient_threshold_index, 75))
-ous_50_percentile_index = int(np.percentile(ous_patient_threshold_index, 50))
+ous_std_threshold_index = int(np.std(ous_patient_threshold_index))
+#ous_25_percentile_index = int(np.percentile(ous_patient_threshold_index, 25))
+#ous_75_percentile_index = int(np.percentile(ous_patient_threshold_index, 75))
+#ous_50_percentile_index = int(np.percentile(ous_patient_threshold_index, 50))
 
-print(ous_patient_threshold_index)
-print(ous_mean_threshold_index)
+#print(ous_patient_threshold_index)
+#print(ous_mean_threshold_index)
+#print(ous_std_threshold_index)
+#print(num_tta_cols[18])
+"""
 print(ous_25_percentile_index)
 print(ous_75_percentile_index)
+"""
+# Box Plot
+ax4 = ax1.twinx()
+sns.boxplot(x=ous_patient_threshold_index, ax=ax4, width=0.2, color='lightcoral', fliersize=3, boxprops={'alpha': 0.5}, whiskerprops={'alpha': 0.5}, capprops={'alpha': 0.5}, medianprops={'alpha': 0.7})  # Adjust width to fit
+
 # Add vertical lines for mean and percentiles for OUS
 ax1.axvline(x=num_tta_cols[ous_mean_threshold_index], color='red', linestyle='--', label=f'Average steady state, Difference threshold = {threshold}')
-ax1.axvline(x=num_tta_cols[ous_25_percentile_index], color='green', linestyle='--', label='25th percentile')
-ax1.axvline(x=num_tta_cols[ous_75_percentile_index], color='blue', linestyle='--', label='75th percentile')
-ax1.axvline(x=num_tta_cols[ous_50_percentile_index], color='blue', linestyle='--', label='50th percentile')
+#ax1.axvline(x=num_tta_cols[ous_mean_threshold_index + ous_std_threshold_index], color='green', linestyle='--', label=f'std')
+#ax1.axvline(x=num_tta_cols[ous_mean_threshold_index - ous_std_threshold_index], color='green', linestyle='--', label=f'std')
+
+#ax1.axvline(x=num_tta_cols[ous_25_percentile_index], color='green', linestyle='--', label='25th percentile')
+#ax1.axvline(x=num_tta_cols[ous_75_percentile_index], color='blue', linestyle='--', label='75th percentile')
+#ax1.axvline(x=num_tta_cols[ous_50_percentile_index], color='blue', linestyle='--', label='50th percentile')
 
 # Shade the area between the mean and percentiles
-ax1.axvspan(num_tta_cols[ous_25_percentile_index], num_tta_cols[ous_mean_threshold_index], color='green', alpha=0.1)
-ax1.axvspan(num_tta_cols[ous_mean_threshold_index], num_tta_cols[ous_75_percentile_index], color='blue', alpha=0.1)
+#ax1.axvspan(num_tta_cols[ous_25_percentile_index], num_tta_cols[ous_mean_threshold_index], color='green', alpha=0.1)
+#ax1.axvspan(num_tta_cols[ous_mean_threshold_index], num_tta_cols[ous_75_percentile_index], color='blue', alpha=0.1)
 ax1.legend(loc='lower left')
 
 
@@ -103,8 +116,26 @@ ax2.set_xticklabels(new_x_labels)
 
 # # Find mean threshold index and add vertical line for MAASTRO
 MAASTRO_mean_threshold_index = int(np.mean(MAASTRO_patient_threshold_index))
+MAASTRO_std_threshold_index = int(np.std(MAASTRO_patient_threshold_index))
+MAASTRO_median_threshold_index = int(np.median(MAASTRO_patient_threshold_index))
+
+
+
+#print(MAASTRO_patient_threshold_index)
+#print(MAASTRO_mean_threshold_index)
+#print(MAASTRO_std_threshold_index)
+#print(len(num_tta_cols))
+#print('median', MAASTRO_median_threshold_index)
+
 ax2.axvline(x=num_tta_cols[MAASTRO_mean_threshold_index], color='red', linestyle='--', label=f'Average steady state, Difference threshold = {threshold}')
+#ax2.axvline(x=num_tta_cols[MAASTRO_mean_threshold_index + MAASTRO_std_threshold_index], color='green', linestyle='--', label=f'std')
+#ax2.axvline(x=num_tta_cols[MAASTRO_mean_threshold_index - MAASTRO_std_threshold_index], color='green', linestyle='--', label=f'std')
 ax2.legend(loc='lower left')
+
+# Box Plot
+ax3 = ax2.twinx()
+sns.boxplot(x=MAASTRO_patient_threshold_index, ax=ax3, width=0.2, color='lightcoral', fliersize=3, boxprops={'alpha': 0.5}, whiskerprops={'alpha': 0.5}, capprops={'alpha': 0.5}, medianprops={'alpha': 0.7})  # Adjust width to fit
+
 
 #fig.suptitle('Finding the average steady state', fontsize=12, y=0.95)
 plt.tight_layout(pad=3) 
