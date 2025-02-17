@@ -76,8 +76,8 @@ if __name__ == '__main__':
     print('Original model:', args.name)
     print('Number of TTA:', num_tta)
 
-    OUS_transformed_path = args.source + '/hnc-tta/analysis/iou_analysis/OUS_iou_vs_original_dice.csv'
-    MAASTRO_transformed_path = args.source + '/hnc-tta/analysis/iou_analysis/MAASTRO_iou_vs_original_dice.csv'
+    OUS_transformed_path = args.source + '/hnc-tta/analysis/patient_wise_analysis/OUS_patient_wise_analysis.csv'
+    MAASTRO_transformed_path = args.source + '/hnc-tta/analysis/patient_wise_analysis/MAASTRO_patient_wise_analysis.csv'
     
 
     if not os.path.exists(base_path):
@@ -85,9 +85,8 @@ if __name__ == '__main__':
 
    
     ous_h5 = args.source + '/segmentation/ous_test.h5'
-    #ous_csv = args.source + '../segmentation/ous_test.csv'
     maastro_h5 = args.source + '/segmentation/maastro_full.h5'
-    #maastro_csv = args.source + '../segmentation/maastro_full.csv'
+   
 
     # NOTE: exclude patient 5 from MAASTRO set
     # data = data[data.patient_idx != 5]

@@ -34,7 +34,7 @@ echo "Finished seting up files."
 export RAY_ROOT=$TMPDIR/ray
 export MAX_SAVE_STEP_GB=0
 rm -rf $TMPDIR/ray/*
-singularity exec --nv deoxys.sif python -u run_iou_analysis.py $1 $2 $PROJECTS/ngoc/TTA 
+singularity exec --nv deoxys.sif python -u run_patient_wise_analysis.py $1 $2 $PROJECTS/ngoc/TTA 
 
 # echo "Finished training. Post-processing results"
 
