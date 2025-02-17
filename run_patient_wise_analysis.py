@@ -110,9 +110,20 @@ if __name__ == '__main__':
 
         ous_df.loc[ous_df["pid"] == pid, "original_dice_score"] = f1_score(y_true, y_pred)
 
-        
+
+    ous_cross_dice = pd.read_csv(base_path + f'/OUS_analysis/OUS_avg_cross_dice_analysis.csv')
+    ous_cross_dice = ous_cross_dice[['pid',f'mean_dice_{num_tta:02d}']]
+
+    ous_transformed_df = pd.merge(ous_cross_dice, ous_df, on='pid', how='outer')
+
+    ous_summarize_df = pd.read_csv(base_path + f'/OUS_analysis/average_{num_tta:02d}.csv')
+    ous_summarize_df = ous_summarize_df[['pid','actual_vol', 'sum_entropy']]
+
+    ous_transformed_df = pd.merge(ous_transformed_df, ous_summarize_df, on='pid', how='outer')
+
+
     # Save the transformed data to a new CSV file
-    ous_df.to_csv(OUS_transformed_path, index=False)
+    ous_transformed_df.to_csv(OUS_transformed_path, index=False)
 
 
     if not os.path.exists(base_path + '/MAASTRO_analysis'):
@@ -131,6 +142,15 @@ if __name__ == '__main__':
 
         maastro_df.loc[maastro_df["pid"] == pid, "original_dice_score"] = f1_score(y_true, y_pred)
         
+    maastro_cross_dice = pd.read_csv(base_path + f'/MAASTRO_analysis/MAASTRO_avg_cross_dice_analysis.csv')
+    maastro_cross_dice = maastro_cross_dice[['pid',f'mean_dice_{num_tta:02d}']]
+
+    maastro_transformed_df = pd.merge(maastro_cross_dice, maastro_df, on='pid', how='outer')
+
+    maastro_summarize_df = pd.read_csv(base_path + f'/MAASTRO_analysis/average_{num_tta:02d}.csv')
+    maastro_summarize_df = maastro_summarize_df[['pid','actual_vol', 'sum_entropy']]
+
+    maastro_transformed_df = pd.merge(maastro_transformed_df, maastro_summarize_df, on='pid', how='outer')
 
     # Save the transformed data to a new CSV file
-    maastro_df.to_csv(MAASTRO_transformed_path, index=False)
+    maastro_transformed_df.to_csv(MAASTRO_transformed_path, index=False)
