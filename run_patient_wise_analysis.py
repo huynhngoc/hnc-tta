@@ -75,14 +75,19 @@ if __name__ == '__main__':
     print('Base_path:', base_path)
     print('Original model:', args.name)
     print('Number of TTA:', num_tta)
+    
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
+
+
+    if not os.path.exists(args.source + '/hnc-tta/analysis/patient_wise_analysis'):
+        os.makedirs(args.source + '/hnc-tta/analysis/patient_wise_analysis')
 
     OUS_transformed_path = args.source + '/hnc-tta/analysis/patient_wise_analysis/OUS_patient_wise_analysis.csv'
     MAASTRO_transformed_path = args.source + '/hnc-tta/analysis/patient_wise_analysis/MAASTRO_patient_wise_analysis.csv'
     
 
-    if not os.path.exists(base_path):
-        os.makedirs(base_path)
-
+  
    
     ous_h5 = args.source + '/segmentation/ous_test.h5'
     maastro_h5 = args.source + '/segmentation/maastro_full.h5'
