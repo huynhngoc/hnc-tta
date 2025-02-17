@@ -390,6 +390,9 @@ num_samples = 15
 patient_id = 45
 uncertainty_map = np.zeros((173, 191, 265, 1))
 
+with open(f'uncertainty_map_pid_{patient_id}.npy', 'rb') as f:
+    uncertainty_map = np.load(f)
+
 with open(f'pid_{patient_id}.npy', 'rb') as f:
 	y_true = np.load(f)
 	y_pred = np.load(f)
