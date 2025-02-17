@@ -85,9 +85,9 @@ if __name__ == '__main__':
 
    
     ous_h5 = args.source + '/segmentation/ous_test.h5'
-    ous_csv = args.source + '../segmentation/ous_test.csv'
-    maastro_h5 = args.source + '../segmentation/maastro_full.h5'
-    maastro_csv = args.source + '../segmentation/maastro_full.csv'
+    #ous_csv = args.source + '../segmentation/ous_test.csv'
+    maastro_h5 = args.source + '/segmentation/maastro_full.h5'
+    #maastro_csv = args.source + '../segmentation/maastro_full.csv'
 
     # NOTE: exclude patient 5 from MAASTRO set
     # data = data[data.patient_idx != 5]
