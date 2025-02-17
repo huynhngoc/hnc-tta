@@ -1,5 +1,5 @@
 from mpl_toolkits.axes_grid1 import ImageGrid
-from deoxys_image import normalize
+#from deoxys_image import normalize
 import matplotlib as mpl
 from matplotlib.lines import Line2D
 from matplotlib import colors as mpl_colors
@@ -10,7 +10,7 @@ from matplotlib.widgets import Slider, Button
 from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
-import h5py
+#import h5py
 import os
 #import pingouin as pg
 #import seaborn as sns
