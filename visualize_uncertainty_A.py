@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 import os
+import h5py
 
 parser = argparse.ArgumentParser()
 parser.add_argument("name")
