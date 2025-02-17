@@ -7,13 +7,16 @@ parser = argparse.ArgumentParser()
 parser.add_argument("name")
 parser.add_argument("num_tta", type=int)
 parser.add_argument("pid")
+parser.add_argument("source")
 
 args, unknown = parser.parse_known_args()
 
 # Define the base path and pid
-base_path = '../analysis/' + args.name
+source = args.source
+base_path = source + '/analysis/' + args.name
 num_tta = args.num_tta  
 pid = args.pid
+
 
 """
 if not os.path.exists(base_path + '/OUS_uncertainty_map_visualization'):
@@ -47,3 +50,15 @@ plt.ylabel('Y-axis')
 # Save the figure as a PDF file
 output_path = f'{base_path}/MAASTRO_uncertainty_map_visualization/{num_tta:02d}/pid_{pid}_slice.pdf'
 plt.savefig(output_path, format='pdf')
+
+print("Preperations for interactive visualization")
+
+with h5py.File(source + '/segmentation/maastro_full.h5', 'r') as f:
+    y_true = f['y'][str(pid)][:]
+    y_pred = f['predicted'][str(pid)][:]
+    image = f['x'][str(pid)][:]
+    
+with open(base_path + f'/MAASTRO_uncertainty_map_visualization//{num_tta:02d}/pid_{pid}.npy', 'wb') as f:
+            np.save(f, y_true)
+            np.save(f, y_pred)
+            np.save(f, image)
