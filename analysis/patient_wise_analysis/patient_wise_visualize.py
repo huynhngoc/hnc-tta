@@ -15,7 +15,7 @@ df = pd.concat([ous_df, maastro_df])  # Merge datasets
 
 print('Working on IoU vs original dice score visualization.....')
 # Create scatter plot
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["original_dice_score"], subset["iou"], label=source)#, alpha=0.7)
 
@@ -36,7 +36,7 @@ plt.show()
 print('Working on average cross dice score vs original dice score visualization.....')
 
 # Create scatter plot
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["original_dice_score"], subset["mean_dice_15"], label=source)#, alpha=0.7)
 
@@ -57,7 +57,7 @@ plt.show()
 print('Working on sum entropy vs original dice score visualization.....')
 
 # Create scatter plot
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["original_dice_score"], subset["sum_entropy"], label=source)#, alpha=0.7)
 
@@ -77,7 +77,7 @@ plt.show()
 print('Working on volume vs original dice score visualization.....')
 
 # Create scatter plot
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["original_dice_score"], subset["actual_vol"], label=source)#, alpha=0.7)
 
@@ -97,7 +97,7 @@ plt.show()
 print('Working on volume vs uncertainty visualization.....')
 
 # Create scatter plot
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["mean_dice_15"], subset["actual_vol"], label=source)#, alpha=0.7)
 
