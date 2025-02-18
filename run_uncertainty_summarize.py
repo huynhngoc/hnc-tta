@@ -64,60 +64,49 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument("name")
-    #parser.add_argument("source")
     parser.add_argument("--iter", default=1, type=int)
-    #parser.add_argument("--dropout_rate", default=10, type=int)
+    parser.add_argument("source")
 
     args, unknown = parser.parse_known_args()
 
-    #base_path = args.source + '/' + args.name + f'_{args.dropout_rate:02d}'
-    base_path = '../analysis/' + args.name
+    base_path = args.source + '/analysis/' + args.name
     iter = args.iter
 
     print('Base_path:', base_path)
     print('Original model:', args.name)
-    #print('Dropout rate:', args.dropout_rate)
     print('Iteration:', iter)
 
     if not os.path.exists(base_path):
         os.makedirs(base_path)
 
-    #ous_h5 = args.source + '/' + args.name + '/ous_test.h5'
-    #ous_csv = args.source + '/' + args.name + '/ous_test.csv'
-    #maastro_h5 = args.source + '/' + args.name + '/maastro_full.h5'
-    #maastro_csv = args.source + '/' + args.name + '/maastro_full.csv'
-    # model_file = args.source + '/' + args.name + '/model.h5'
-    ous_h5 = '../segmentation/ous_test.h5'
-    ous_csv = '../segmentation/ous_test.csv'
-    maastro_h5 = '../segmentation/maastro_full.h5'
-    maastro_csv = '../segmentation/maastro_full.csv'
+
+    ous_h5 = args.source + '/segmentation/ous_test.h5'
+    ous_csv = args.source + '/segmentation/ous_test.csv'
+    maastro_h5 = args.source + '/segmentation/maastro_full.h5'
+    maastro_csv = args.source + '/segmentation/maastro_full.csv'
 
     # NOTE: exclude patient 5 from MAASTRO set
     # data = data[data.patient_idx != 5]
 
-    # dropout_model = model_from_full_config(
-    #     'config/uncertainty/' + args.name + '_r' + str(args.dropout_rate) + '.json', weights_file=model_file)
-
+    
     if not os.path.exists(base_path + '/OUS_analysis'):
         os.makedirs(base_path + '/OUS_analysis')
-    # if not os.path.exists(base_path + '/OUS_agg'):
-    #     os.makedirs(base_path + '/OUS_agg')
-
+    
     ous_df = pd.read_csv(ous_csv)
+    ous_df = ous_df[ous_df['patient_idx'] != 110]
+
 
     data = []
     print('Working on OUS.....')
     for pid in ous_df.patient_idx:
         print('PID:', pid)
-        # if not os.path.exists(base_path + '/OUS_agg/' + str(pid)):
-        #     os.makedirs(base_path + '/OUS_agg/' + str(pid))
 
         with h5py.File(ous_h5, 'r') as f:
             y_true = f['y'][str(pid)][:]
 
         y_pred = []
         for i in range(1, iter+1):
-            with open(f'../results/{args.name}/OUS/' + str(pid) + f'/{iter:02d}.npy', 'rb') as f:
+            with open(args.source + f'/results/{args.name}/OUS/' + str(pid) + f'/{iter:02d}.npy', 'rb') as f:
                 y_pred.append(np.load(f))
         y_pred = np.stack(y_pred, axis=0).mean(axis=0)
         uncertainty_map = - y_pred * np.log(y_pred)
@@ -147,8 +136,7 @@ if __name__ == '__main__':
             'entropy_over_20_%': (uncertainty_map > 0.20).astype(float).sum(),
         })
 
-        # with open(base_path + '/OUS_agg/' + str(pid) + f'/{iter:02d}.npy', 'wb') as f:
-        #     np.save(f, y_pred)
+
 
     pd.DataFrame(data).to_csv(
         base_path + f'/OUS_analysis/average_{iter:02d}.csv', index=False
@@ -156,22 +144,19 @@ if __name__ == '__main__':
 
     if not os.path.exists(base_path + '/MAASTRO_analysis'):
         os.makedirs(base_path + '/MAASTRO_analysis')
-    # if not os.path.exists(base_path + '/MAASTRO_agg'):
-    #     os.makedirs(base_path + '/MAASTRO_agg')
 
     data = []
     maastro_df = pd.read_csv(maastro_csv)
     print('Working on MAASTRO.....')
     for pid in maastro_df.patient_idx:
         print('PID:', pid)
-        # if not os.path.exists(base_path + '/MAASTRO_agg/' + str(pid)):
-        #     os.makedirs(base_path + '/MAASTRO_agg/' + str(pid))
+    
         with h5py.File(maastro_h5, 'r') as f:
             y_true = f['y'][str(pid)][:]
 
         y_pred = []
         for i in range(1, iter+1):
-            with open(f'../results/{args.name}/MAASTRO/' + str(pid) + f'/{iter:02d}.npy', 'rb') as f:
+            with open(args.source + f'/results/{args.name}/MAASTRO/' + str(pid) + f'/{iter:02d}.npy', 'rb') as f:
                 y_pred.append(np.load(f))
         y_pred = np.stack(y_pred, axis=0).mean(axis=0)
         uncertainty_map = - y_pred * np.log(y_pred)
@@ -201,8 +186,6 @@ if __name__ == '__main__':
             'entropy_over_20_%': (uncertainty_map > 0.20).astype(float).sum(),
         })
 
-        # with open(base_path + '/MAASTRO_agg/' + str(pid) + f'/{iter:02d}.npy', 'wb') as f:
-        #     np.save(f, y_pred)
 
     pd.DataFrame(data).to_csv(
         base_path + f'/MAASTRO_analysis/average_{iter:02d}.csv', index=False
