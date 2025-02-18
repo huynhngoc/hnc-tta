@@ -106,17 +106,15 @@ if __name__ == '__main__':
     print('Working on OUS.....')
     for pid in ous_df.patient_idx:
         print('PID:', pid)
-        # with h5py.File(ous_h5, 'r') as f:
-        #     y_true = f['y'][str(pid)][:]
         y_pred = []
         intersection = None
         union = None
         for i in range(1, num_tta + 1):
             print('tta_idx:', i)
-            with open('../results/' + args.name + f'/OUS/{pid}/{i:02d}.npy', 'rb') as f:
+            with open(args.source + '/results/' + args.name + f'/OUS/{pid}/{i:02d}.npy', 'rb') as f:
                 prob = np.load(f)
-            # entropy map
             y_pred.append(prob)
+
             # calculate intersection and union for IoU
             if intersection is None:
                 intersection = (prob > 0.5).astype(float)
@@ -124,6 +122,7 @@ if __name__ == '__main__':
             else:
                 intersection = intersection * (prob > 0.5).astype(float)
                 union = union + (prob > 0.5).astype(float)
+
             # vol
             vol_info.append({
                 'pid': pid,
@@ -136,7 +135,7 @@ if __name__ == '__main__':
                 if i == j:
                     continue
                 print('tta_idx cross:', j)
-                with open('../results/' + args.name + f'/OUS/{pid}/{j:02d}.npy', 'rb') as f:
+                with open(args.source + '/results/' + args.name + f'/OUS/{pid}/{j:02d}.npy', 'rb') as f:
                     prob_2 = np.load(f)
 
                 dice_info.append({
@@ -188,17 +187,15 @@ if __name__ == '__main__':
     print('Working on MAASTRO.....')
     for pid in maastro_df.patient_idx:
         print('PID:', pid)
-        # with h5py.File(maastro_h5, 'r') as f:
-        #     y_true = f['y'][str(pid)][:]
         y_pred = []
         intersection = None
         union = None
         for i in range(1, num_tta + 1):
             print('tta_idx:', i)
-            with open('../results/' + args.name + f'/MAASTRO/{pid}/{i:02d}.npy', 'rb') as f:
+            with open(args.source + '/results/' + args.name + f'/MAASTRO/{pid}/{i:02d}.npy', 'rb') as f:
                 prob = np.load(f)
-            # entropy map
             y_pred.append(prob)
+
             # calculate intersection and union for IoU
             if intersection is None:
                 intersection = (prob > 0.5).astype(float)
@@ -218,7 +215,7 @@ if __name__ == '__main__':
                 if i == j:
                     continue
                 print('tta_idx cross:', j)
-                with open('../results/' + args.name + f'/MAASTRO/{pid}/{j:02d}.npy', 'rb') as f:
+                with open(args.source + '/results/' + args.name + f'/MAASTRO/{pid}/{j:02d}.npy', 'rb') as f:
                     prob_2 = np.load(f)
 
                 dice_info.append({
