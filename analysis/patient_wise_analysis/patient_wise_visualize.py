@@ -55,6 +55,8 @@ plt.show()
 
 
 print('Working on sum entropy vs original dice score visualization.....')
+filtered_df = df[df['sum_entropy']<150000]
+#print(filtered_df)
 
 # Create scatter plot
 plt.figure(figsize=(6, 4))
@@ -71,6 +73,24 @@ plt.grid(True)
 
 # Save the plot to a PDF file
 plt.savefig('entropy_vs_orgdice.pdf', format='pdf', bbox_inches='tight')
+
+plt.show()
+
+# Create scatter plot
+plt.figure(figsize=(6, 4))
+for source, subset in filtered_df.groupby("source"):
+    plt.scatter(subset["original_dice_score"], subset["sum_entropy"], label=source)#, alpha=0.7)
+
+
+# Labels and title
+plt.xlabel("Original Dice Score")
+plt.ylabel("Sum Entropy < 150000")
+plt.title("Scatter Plot of Sum Entropy (< 150000) vs. Original Dice Score")
+plt.legend()
+plt.grid(True)
+
+# Save the plot to a PDF file
+plt.savefig('entropy_filtered_vs_orgdice.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
@@ -111,6 +131,26 @@ plt.grid(True)
 
 # Save the plot to a PDF file
 plt.savefig('volume_vs_crossdice.pdf', format='pdf', bbox_inches='tight')
+
+plt.show()
+
+print('Working on volume vs uncertainty (IoU) visualization.....')
+
+# Create scatter plot
+plt.figure(figsize=(6, 4))
+for source, subset in df.groupby("source"):
+    plt.scatter(subset["iou"], subset["actual_vol"], label=source)#, alpha=0.7)
+
+
+# Labels and title
+plt.xlabel("IoU")
+plt.ylabel("Actual Volume")
+plt.title("Scatter Plot of Actual Volume vs. IoU")
+plt.legend()
+plt.grid(True)
+
+# Save the plot to a PDF file
+plt.savefig('volume_vs_iou.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
