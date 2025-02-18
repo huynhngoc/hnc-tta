@@ -64,41 +64,31 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument("name")
-    #parser.add_argument("source")
     parser.add_argument("--num_tta", default=1, type=int)
-    #parser.add_argument("--dropout_rate", default=10, type=int)
+    parser.add_argument("source")
+    
 
     args, unknown = parser.parse_known_args()
 
-    #base_path = args.source + '/' + args.name + f'_{args.dropout_rate:02d}'
-    base_path = '../analysis/' + args.name
+    base_path = args.source + '/analysis/' + args.name
     num_tta = args.num_tta
 
     print('Base_path:', base_path)
     print('Original model:', args.name)
-    #print('Dropout rate:', args.dropout_rate)
     print('Number of samples:', num_tta)
 
     if not os.path.exists(base_path):
         os.makedirs(base_path)
 
-    #ous_h5 = args.source + '/' + args.name + '/ous_test.h5'
-    #ous_csv = args.source + '/' + args.name + '/ous_original_results.csv'
-    #maastro_h5 = args.source + '/' + args.name + '/maastro_full.h5'
-    #maastro_csv = args.source + '/' + args.name + '/maastro_original_results.csv'
-    # model_file = args.source + '/' + args.name + '/model.h5'
-
-    ous_h5 = '../segmentation/ous_test.h5'
-    ous_csv = '../segmentation/ous_test.csv'
-    maastro_h5 = '../segmentation/maastro_full.h5'
-    maastro_csv = '../segmentation/maastro_full.csv'
+    ous_h5 = args.source + '/segmentation/ous_test.h5'
+    ous_csv = args.source + '/segmentation/ous_test.csv'
+    maastro_h5 = args.source + '/segmentation/maastro_full.h5'
+    maastro_csv = args.source + '/segmentation/maastro_full.csv'
     
     # NOTE: exclude patient 5 from MAASTRO set
     # data = data[data.patient_idx != 5]
 
-    # dropout_model = model_from_full_config(
-    #     'config/uncertainty/' + args.name + '_r' + str(args.dropout_rate) + '.json', weights_file=model_file)
-
+    
     if not os.path.exists(base_path + '/OUS_uncertainty_map'):
         os.makedirs(base_path + '/OUS_uncertainty_map')
     if not os.path.exists(base_path + f'/OUS_uncertainty_map/{num_tta:02d}'):
@@ -107,6 +97,7 @@ if __name__ == '__main__':
         os.makedirs(base_path + '/OUS_analysis')
 
     ous_df = pd.read_csv(ous_csv)
+    ous_df = ous_df[ous_df['patient_idx'] != 110]
 
     data = []
     dice_info = []
