@@ -87,23 +87,17 @@ if __name__ == '__main__':
     MAASTRO_transformed_path = args.source + '/hnc-tta/analysis/patient_wise_analysis/MAASTRO_patient_wise_analysis.csv'
     
 
-  
-   
     ous_h5 = args.source + '/segmentation/ous_test.h5'
     maastro_h5 = args.source + '/segmentation/maastro_full.h5'
-   
-
-    # NOTE: exclude patient 5 from MAASTRO set
-    # data = data[data.patient_idx != 5]
 
     
     if not os.path.exists(base_path + '/OUS_analysis'):
         os.makedirs(base_path + '/OUS_analysis')
 
+    
     ous_df = pd.read_csv(base_path + f'/OUS_analysis/iou_{num_tta:02d}.csv')
     ous_df["original_dice_score"] = 0  # Initialize the new column
         
-  
 
     print('Working on OUS.....')
     for pid in ous_df.pid:
@@ -125,7 +119,6 @@ if __name__ == '__main__':
     ous_summarize_df = ous_summarize_df[['pid','actual_vol', 'sum_entropy']]
 
     ous_transformed_df = pd.merge(ous_transformed_df, ous_summarize_df, on='pid', how='outer')
-
 
     # Save the transformed data to a new CSV file
     ous_transformed_df.to_csv(OUS_transformed_path, index=False)
