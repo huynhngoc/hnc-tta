@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from scipy.stats import spearmanr
 
 
 ous_df = pd.read_csv("OUS_patient_wise_analysis.csv")
@@ -12,13 +13,22 @@ ous_df["source"] = "OUS"  # Add identifier column
 maastro_df["source"] = "MAASTRO"  # Add identifier column
 df = pd.concat([ous_df, maastro_df])  # Merge datasets
 
+spearman_corr_dict = {}
+p_value_dict = {}
 
 print('Working on IoU vs original dice score visualization.....')
+
 # Create scatter plot
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["original_dice_score"], subset["iou"], label=source)#, alpha=0.7)
 
+    # Calculate Spearman's correlation coefficient
+    correlation, p_value = spearmanr(subset["original_dice_score"], subset["iou"])
+    # Store values in dictionaries
+    spearman_corr_dict[f"{source} original_dice_vs_iou"] = correlation
+    p_value_dict[f"{source} original_dice_vs_iou"] = p_value
+  
 
 # Labels and title
 plt.xlabel("Original Dice Score")
@@ -39,7 +49,11 @@ print('Working on average cross dice score vs original dice score visualization.
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["original_dice_score"], subset["mean_dice_15"], label=source)#, alpha=0.7)
-
+    # Calculate Spearman's correlation coefficient
+    correlation, p_value = spearmanr(subset["original_dice_score"], subset["mean_dice_15"])
+    # Store values in dictionaries
+    spearman_corr_dict[f"{source} original_dice_vs_mean_dice_15"] = correlation
+    p_value_dict[f"{source} original_dice_vs_mean_dice_15"] = p_value
 
 # Labels and title
 plt.xlabel("Original Dice Score")
@@ -154,3 +168,15 @@ plt.savefig('volume_vs_iou.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
+# Convert dictionary to a DataFrame
+results = pd.DataFrame({
+    "Comparison": spearman_corr_dict.keys(),
+    "Spearman_Correlation": spearman_corr_dict.values(),
+    "P-Value": p_value_dict.values()
+})
+
+# Save as a CSV file
+results.to_csv("spearman_results.csv", index=False)
+
+# Print to verify
+print(results)
