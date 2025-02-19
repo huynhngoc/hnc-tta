@@ -19,17 +19,18 @@ num_tta = args.num_tta
 pid = args.pid
 
 
-"""
+
 if not os.path.exists(base_path + '/OUS_uncertainty_map_visualization'):
     os.makedirs(base_path + '/OUS_uncertainty_map_visualization')
-if not os.path.exists(base_path + f'/OUS_uncertainty_map_visualization/{num_tta:02d}_{pid}'):
-    os.makedirs(base_path + f'/OUS_uncertainty_map_visualization/{num_tta:02d}_{pid}')
-"""
+if not os.path.exists(base_path + f'/OUS_uncertainty_map_visualization/{num_tta:02d}'):
+    os.makedirs(base_path + f'/OUS_uncertainty_map_visualization/{num_tta:02d}')
+
 
 if not os.path.exists(base_path + '/MAASTRO_uncertainty_map_visualization'):
     os.makedirs(base_path + '/MAASTRO_uncertainty_map_visualization')
 if not os.path.exists(base_path + f'/MAASTRO_uncertainty_map_visualization/{num_tta:02d}'):
     os.makedirs(base_path + f'/MAASTRO_uncertainty_map_visualization/{num_tta:02d}')
+
 
 print(f'Visualizing uncertainty map for PID: {pid} with {num_tta} TTA')
 
@@ -54,12 +55,29 @@ plt.savefig(output_path, format='pdf')
 
 print("Preperations for interactive visualization")
 
+print('MAASTRO')
+
 with h5py.File(source + '/segmentation/maastro_full.h5', 'r') as f:
     y_true = f['y'][str(pid)][:]
     y_pred = f['predicted'][str(pid)][:]
     image = f['x'][str(pid)][:]
     
 with open(base_path + f'/MAASTRO_uncertainty_map_visualization//{num_tta:02d}/pid_{pid}.npy', 'wb') as f:
+            np.save(f, y_true)
+            np.save(f, y_pred)
+            np.save(f, image)
+
+
+print("Preperations for interactive visualization")
+print('OUS')
+
+
+with h5py.File(source + '/segmentation/ous_test.h5', 'r') as f:
+    y_true = f['y'][str(pid)][:]
+    y_pred = f['predicted'][str(pid)][:]
+    image = f['x'][str(pid)][:]
+    
+with open(base_path + f'/OUS_uncertainty_map_visualization//{num_tta:02d}/pid_{pid}.npy', 'wb') as f:
             np.save(f, y_true)
             np.save(f, y_pred)
             np.save(f, image)
