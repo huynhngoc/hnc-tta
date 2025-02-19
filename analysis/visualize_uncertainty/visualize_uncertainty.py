@@ -360,17 +360,6 @@ class VisualizeUncertaintyMapV2:
 
 
 
-#if not os.path.exists(f'../analysis/noise_aug/OUS_uncertainty_map_visualization/{num_samples:02d}'):
-    #os.makedirs(f'../analysis/noise_aug/OUS_uncertainty_map_visualization/{num_samples:02d}')
-
-#with open(f'../analysis/noise_aug/OUS_uncertainty_map/{num_samples:02d}/{patient_id}.npy', 'rb') as f:
-    #uncertainty_map = np.load(f)
-
-#with h5py.File('../segmentation/ous_test.h5', 'r') as f:
-    #y_true = f['y'][str(patient_id)][:]
-    #y_pred = f['predicted'][str(patient_id)][:]
-    #image = f['x'][str(patient_id)][:]
-
 """
 # find the the intersection and union of predictions from different "models"
 # (optional), did not used in the paper
@@ -390,20 +379,25 @@ num_samples = 15
 patient_id = 45
 uncertainty_map = np.zeros((173, 191, 265, 1))
 
-with open(f'uncertainty_map_pid_{patient_id}.npy', 'rb') as f:
+folder_path = '/Users/bruker/Desktop/Master'
+umap_path = os.path.join(folder_path, f'uncertainty_map_pid_{patient_id}.npy')
+image_path = os.path.join(folder_path, f'pid_{patient_id}.npy')
+
+with open(umap_path, 'rb') as f:
     uncertainty_map = np.load(f)
 
-with open(f'pid_{patient_id}.npy', 'rb') as f:
+with open(image_path, 'rb') as f:
 	y_true = np.load(f)
 	y_pred = np.load(f)
 	image = np.load(f)
 
+intersection = np.zeros_like(y_true)
+union = np.zeros_like(y_true)
+
 vis = VisualizeUncertaintyMapV2(
-    image, y_true, y_pred, uncertainty_map)#, intersection, union)
+    image, y_true, y_pred, uncertainty_map, intersection, union)
 vis.start()
 
-# Save the figure to a file
-#output_path = f'../analysis/noise_aug/OUS_uncertainty_map_visualization/{num_samples:02d}/pid_{patient_id}.pdf'
-#plt.savefig(output_path, format='pdf')
+
 
 plt.show()
