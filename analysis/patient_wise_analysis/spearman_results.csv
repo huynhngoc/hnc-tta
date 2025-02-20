@@ -1,5 +1,7 @@
 Comparison,Spearman_Correlation,P-Value
 MAASTRO original_dice_vs_iou,0.404197625353832,9.000883587574749e-06
-OUS original_dice_vs_iou,0.5435272045028143,0.0002895032434807991
-MAASTRO original_dice_vs_mean_dice_15,0.3479689267416329,0.00015900779908093065
-OUS original_dice_vs_mean_dice_15,0.5046904315197,0.0008969665021885835
+OUS original_dice_vs_iou,,
+MAASTRO original_dice_vs_mean_cross_dice_15,0.3479689267416329,0.00015900779908093065
+OUS original_dice_vs_mean_cross_dice_15,,
+MAASTRO original_dice_vs_entropy_region,0.45594029863258667,3.8783735868732066e-07
+OUS original_dice_vs_entropy_region,,

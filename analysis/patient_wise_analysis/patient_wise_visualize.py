@@ -15,13 +15,20 @@ df = pd.concat([ous_df, maastro_df])  # Merge datasets
 
 spearman_corr_dict = {}
 p_value_dict = {}
+print(df[["original_dice_score", "iou"]].isna().sum())
+exit()
 
 print('Working on IoU vs original dice score visualization.....')
 
 # Create scatter plot
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
-    plt.scatter(subset["original_dice_score"], subset["iou"], label=source)#, alpha=0.7)
+    print(f"Group: {source}, Number of rows: {len(subset)}")
+    print(f"Group: {source}")
+    print(f"Unique values in original_dice_score: {subset['original_dice_score'].nunique()}")
+    print(f"Unique values in iou: {subset['iou'].nunique()}")
+    print("-" * 30)
+    plt.scatter(subset["original_dice_score"], subset["iou"], label=source)
 
     # Calculate Spearman's correlation coefficient
     correlation, p_value = spearmanr(subset["original_dice_score"], subset["iou"])
@@ -29,13 +36,13 @@ for source, subset in df.groupby("source"):
     spearman_corr_dict[f"{source} original_dice_vs_iou"] = correlation
     p_value_dict[f"{source} original_dice_vs_iou"] = p_value
   
-
+exit()
 # Labels and title
-plt.xlabel("Original Dice Score")
-plt.ylabel("IoU")
-plt.title("Scatter Plot of IoU vs. Original Dice Score")
+plt.xlabel("Original DSC")
+plt.ylabel('$IoU_{TTA}$')
+#plt.title("Scatter Plot of IoU vs. Original Dice Score")
 plt.legend()
-plt.grid(True)
+plt.grid(True, alpha=0.3)
 
 # Save the plot to a PDF file
 plt.savefig('iou_vs_dice.pdf', format='pdf', bbox_inches='tight')
@@ -48,26 +55,68 @@ print('Working on average cross dice score vs original dice score visualization.
 # Create scatter plot
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
-    plt.scatter(subset["original_dice_score"], subset["mean_dice_15"], label=source)#, alpha=0.7)
+    plt.scatter(subset["original_dice_score"], subset["mean_dice_15"], label=source)
     # Calculate Spearman's correlation coefficient
     correlation, p_value = spearmanr(subset["original_dice_score"], subset["mean_dice_15"])
     # Store values in dictionaries
-    spearman_corr_dict[f"{source} original_dice_vs_mean_dice_15"] = correlation
-    p_value_dict[f"{source} original_dice_vs_mean_dice_15"] = p_value
+    spearman_corr_dict[f"{source} original_dice_vs_mean_cross_dice_15"] = correlation
+    p_value_dict[f"{source} original_dice_vs_mean_cross_dice_15"] = p_value
 
 # Labels and title
-plt.xlabel("Original Dice Score")
-plt.ylabel("Mean Cross Dice Score")
-plt.title("Scatter Plot of Mean Cross Dice Score vs. Original Dice Score")
+plt.xlabel("Original DSC")
+plt.ylabel("Mean Cross Dice Score (15 TTA)")
+#plt.title("Scatter Plot of Mean Cross Dice Score vs. Original Dice Score")
 plt.legend()
-plt.grid(True)
+plt.grid(True, alpha=0.3)
 
 # Save the plot to a PDF file
 plt.savefig('crossdice_vs_orgdice.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
+print('Working on sum entropy predicted region vs original dice score visualization.....')
 
+# Create scatter plot
+plt.figure(figsize=(6, 4))
+for source, subset in df.groupby("source"):
+    plt.scatter(subset["original_dice_score"], subset["entropy_region"], label=source)#, alpha=0.7)
+    # Calculate Spearman's correlation coefficient
+    correlation, p_value = spearmanr(subset["original_dice_score"], subset["entropy_region"])
+    # Store values in dictionaries
+    spearman_corr_dict[f"{source} original_dice_vs_entropy_region"] = correlation
+    p_value_dict[f"{source} original_dice_vs_entropy_region"] = p_value
+
+
+# Labels and title
+plt.xlabel("Original DSC")
+plt.ylabel("Entropy of predicted region")
+#plt.title("Scatter Plot of Entropy in predicted region vs. Original Dice Score")
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Save the plot to a PDF file
+plt.savefig('entropy_region_vs_orgdice.pdf', format='pdf', bbox_inches='tight')
+
+plt.show()
+
+
+# Convert dictionary to a DataFrame
+results = pd.DataFrame({
+    "Comparison": spearman_corr_dict.keys(),
+    "Spearman_Correlation": spearman_corr_dict.values(),
+    "P-Value": p_value_dict.values()
+})
+
+# Save as a CSV file
+results.to_csv("spearman_results.csv", index=False)
+
+# Print to verify
+print(results)
+
+
+exit()
+
+"""
 print('Working on sum entropy vs original dice score visualization.....')
 filtered_df = df[df['sum_entropy']<150000]
 #print(filtered_df)
@@ -107,6 +156,8 @@ plt.grid(True)
 plt.savefig('entropy_filtered_vs_orgdice.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
+
+
 
 print('Working on volume vs original dice score visualization.....')
 
@@ -168,15 +219,4 @@ plt.savefig('volume_vs_iou.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
-# Convert dictionary to a DataFrame
-results = pd.DataFrame({
-    "Comparison": spearman_corr_dict.keys(),
-    "Spearman_Correlation": spearman_corr_dict.values(),
-    "P-Value": p_value_dict.values()
-})
-
-# Save as a CSV file
-results.to_csv("spearman_results.csv", index=False)
-
-# Print to verify
-print(results)
+"""
