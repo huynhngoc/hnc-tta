@@ -78,7 +78,7 @@ ax2.set_xticklabels(new_x_labels)
 if group2_threshold_index is not None:
     ax2.axvline(x=num_tta_cols[group2_threshold_index], color='red', linestyle='--', label=f'Difference threshold = {threshold}')
 
-fig.suptitle('OUS Dataset', fontsize=12)
+#fig.suptitle('OUS Dataset', fontsize=12)
 plt.tight_layout(pad=2.0)   
 
 # Save the plot to a PDF file
@@ -150,7 +150,7 @@ if group2_threshold_index is not None:
     ax2.axvline(x=num_tta_cols[group2_threshold_index], color='red', linestyle='--', label='Difference threshold')
 
 
-fig.suptitle('MAASTRO Dataset', fontsize=12)
+#fig.suptitle('MAASTRO Dataset', fontsize=12)
 plt.tight_layout(pad=2.0) 
 
 # Save the plot to a PDF file
