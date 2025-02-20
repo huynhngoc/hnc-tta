@@ -15,19 +15,12 @@ df = pd.concat([ous_df, maastro_df])  # Merge datasets
 
 spearman_corr_dict = {}
 p_value_dict = {}
-print(df[["original_dice_score", "iou"]].isna().sum())
-exit()
 
 print('Working on IoU vs original dice score visualization.....')
 
 # Create scatter plot
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
-    print(f"Group: {source}, Number of rows: {len(subset)}")
-    print(f"Group: {source}")
-    print(f"Unique values in original_dice_score: {subset['original_dice_score'].nunique()}")
-    print(f"Unique values in iou: {subset['iou'].nunique()}")
-    print("-" * 30)
     plt.scatter(subset["original_dice_score"], subset["iou"], label=source)
 
     # Calculate Spearman's correlation coefficient
@@ -36,7 +29,6 @@ for source, subset in df.groupby("source"):
     spearman_corr_dict[f"{source} original_dice_vs_iou"] = correlation
     p_value_dict[f"{source} original_dice_vs_iou"] = p_value
   
-exit()
 # Labels and title
 plt.xlabel("Original DSC")
 plt.ylabel('$IoU_{TTA}$')
@@ -77,7 +69,7 @@ plt.show()
 print('Working on sum entropy predicted region vs original dice score visualization.....')
 
 # Create scatter plot
-plt.figure(figsize=(6, 4))
+plt.figure(figsize=(8, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["original_dice_score"], subset["entropy_region"], label=source)#, alpha=0.7)
     # Calculate Spearman's correlation coefficient
@@ -99,6 +91,55 @@ plt.savefig('entropy_region_vs_orgdice.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
+print('Working on volume vs original dice score visualization.....')
+
+# Create scatter plot
+plt.figure(figsize=(8, 4))
+for source, subset in df.groupby("source"):
+    plt.scatter(subset["original_dice_score"], subset["actual_vol"], label=source)
+    # Calculate Spearman's correlation coefficient
+    correlation, p_value = spearmanr(subset["original_dice_score"], subset["actual_vol"])
+    # Store values in dictionaries
+    spearman_corr_dict[f"{source} original_dice_vs_actual_vol"] = correlation
+    p_value_dict[f"{source} original_dice_vs_actual_vol"] = p_value
+
+# Labels and title
+plt.xlabel("Original DSC")
+plt.ylabel("Actual Volume")
+#plt.title("Scatter Plot of Actual Volume vs. Original Dice Score")
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Save the plot to a PDF file
+plt.savefig('volume_vs_orgdice.pdf', format='pdf', bbox_inches='tight')
+
+plt.show()
+
+print('Working on volume vs uncertainty visualization.....')
+
+# Create scatter plot
+plt.figure(figsize=(8, 4))
+for source, subset in df.groupby("source"):
+    plt.scatter(subset["mean_dice_15"], subset["actual_vol"], label=source)
+    # Calculate Spearman's correlation coefficient
+    correlation, p_value = spearmanr(subset["mean_dice_15"], subset["actual_vol"])
+    # Store values in dictionaries
+    spearman_corr_dict[f"{source} cross_dice_vs_actual_vol"] = correlation
+    p_value_dict[f"{source} cross_dice_vs_actual_vol"] = p_value
+
+
+# Labels and title
+plt.xlabel("Mean Cross Dice Score")
+plt.ylabel("Actual Volume")
+#plt.title("Scatter Plot of Actual Volume vs. Mean Cross Dice Score")
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Save the plot to a PDF file
+plt.savefig('volume_vs_crossdice.pdf', format='pdf', bbox_inches='tight')
+
+plt.show()
+
 
 # Convert dictionary to a DataFrame
 results = pd.DataFrame({
@@ -113,8 +154,6 @@ results.to_csv("spearman_results.csv", index=False)
 # Print to verify
 print(results)
 
-
-exit()
 
 """
 print('Working on sum entropy vs original dice score visualization.....')
@@ -159,45 +198,6 @@ plt.show()
 
 
 
-print('Working on volume vs original dice score visualization.....')
-
-# Create scatter plot
-plt.figure(figsize=(6, 4))
-for source, subset in df.groupby("source"):
-    plt.scatter(subset["original_dice_score"], subset["actual_vol"], label=source)#, alpha=0.7)
-
-
-# Labels and title
-plt.xlabel("Original Dice Score")
-plt.ylabel("Actual Volume")
-plt.title("Scatter Plot of Actual Volume vs. Original Dice Score")
-plt.legend()
-plt.grid(True)
-
-# Save the plot to a PDF file
-plt.savefig('volume_vs_orgdice.pdf', format='pdf', bbox_inches='tight')
-
-plt.show()
-
-print('Working on volume vs uncertainty visualization.....')
-
-# Create scatter plot
-plt.figure(figsize=(6, 4))
-for source, subset in df.groupby("source"):
-    plt.scatter(subset["mean_dice_15"], subset["actual_vol"], label=source)#, alpha=0.7)
-
-
-# Labels and title
-plt.xlabel("Mean Cross Dice Score")
-plt.ylabel("Actual Volume")
-plt.title("Scatter Plot of Actual Volume vs. Mean Cross Dice Score")
-plt.legend()
-plt.grid(True)
-
-# Save the plot to a PDF file
-plt.savefig('volume_vs_crossdice.pdf', format='pdf', bbox_inches='tight')
-
-plt.show()
 
 print('Working on volume vs uncertainty (IoU) visualization.....')
 
