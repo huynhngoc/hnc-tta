@@ -78,7 +78,7 @@ plt.show()
 print('Working on sum entropy predicted region vs original dice score visualization.....')
 
 # Create scatter plot
-plt.figure(figsize=(8, 4))
+plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["original_dice_score"], subset["entropy_region"], label=source)#, alpha=0.7)
     # Calculate Spearman's correlation coefficient
@@ -91,6 +91,7 @@ for source, subset in df.groupby("source"):
 # Labels and title
 plt.xlabel("Original DSC")
 plt.ylabel("Entropy of predicted region")
+plt.yticks(rotation=45)
 #plt.title("Scatter Plot of Entropy in predicted region vs. Original Dice Score")
 plt.legend()
 plt.grid(True, alpha=0.3)
@@ -103,7 +104,7 @@ plt.show()
 print('Working on volume vs original dice score visualization.....')
 
 # Create scatter plot
-plt.figure(figsize=(8, 4))
+plt.figure(figsize=(6.5, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["original_dice_score"], subset["actual_vol"], label=source)
     # Calculate Spearman's correlation coefficient
@@ -115,6 +116,7 @@ for source, subset in df.groupby("source"):
 # Labels and title
 plt.xlabel("Original DSC")
 plt.ylabel("Actual Volume")
+plt.yticks(rotation=45)
 #plt.title("Scatter Plot of Actual Volume vs. Original Dice Score")
 plt.legend()
 plt.grid(True, alpha=0.3)
@@ -127,7 +129,7 @@ plt.show()
 print('Working on volume vs uncertainty visualization.....')
 
 # Create scatter plot
-plt.figure(figsize=(8, 4))
+plt.figure(figsize=(6.5, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset[f"mean_dice_{num_tta}"], subset["actual_vol"], label=source)
     # Calculate Spearman's correlation coefficient
@@ -140,6 +142,7 @@ for source, subset in df.groupby("source"):
 # Labels and title
 plt.xlabel("Mean Cross Dice Score")
 plt.ylabel("Actual Volume")
+plt.yticks(rotation=45)
 #plt.title("Scatter Plot of Actual Volume vs. Mean Cross Dice Score")
 plt.legend()
 plt.grid(True, alpha=0.3)
