@@ -17,9 +17,13 @@ if __name__ == '__main__':
     base_path = args.source + '/analysis/' + args.name 
     num_tta = args.num_tta
 
-    OUS_transformed_path = args.source + '/hnc-tta/analysis/CrossDiceVisualization/OUS_avg_cross_dice_analysis.csv'
-    MAASTRO_transformed_path = args.source + '/hnc-tta/analysis/CrossDiceVisualization/MAASTRO_avg_cross_dice_analysis.csv'
+    #OUS_transformed_path = args.source + '/hnc-tta/analysis/CrossDiceVisualization/OUS_avg_cross_dice_analysis.csv'
+    #MAASTRO_transformed_path = args.source + '/hnc-tta/analysis/CrossDiceVisualization/MAASTRO_avg_cross_dice_analysis.csv'
     
+    OUS_transformed_path = args.source + '/OUS_analysis/OUS_avg_cross_dice_analysis.csv'
+    MAASTRO_transformed_path = args.source + '/MAASTRO_analysis/MAASTRO_avg_cross_dice_analysis.csv'
+    
+
     # Initialize an empty DataFrame to store the transformed data
     ous_transformed_df = pd.DataFrame()
     MAASTRO_transformed_df = pd.DataFrame()
