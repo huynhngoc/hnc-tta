@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
     #OUS_transformed_path = args.source + f'/hnc-tta/analysis/patient_wise_analysis/OUS_patient_wise_analysis.csv'
     #MAASTRO_transformed_path = args.source + f'/hnc-tta/analysis/patient_wise_analysis/MAASTRO_patient_wise_analysis.csv'
-    OUS_transformed_path = base_path + f'OUS_analysis/OUS_patient_wise_analysis_{num_tta}TTA.csv'
+    OUS_transformed_path = base_path + f'/OUS_analysis/OUS_patient_wise_analysis_{num_tta}TTA.csv'
     MAASTRO_transformed_path = base_path + f'/MAASTRO_analysis/MAASTRO_patient_wise_analysis_{num_tta}TTA.csv'
     
 
