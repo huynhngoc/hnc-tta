@@ -3,10 +3,19 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from scipy.stats import spearmanr
+import os
+import argparse
 
 
-ous_df = pd.read_csv("OUS_patient_wise_analysis.csv")
-maastro_df = pd.read_csv("MAASTRO_patient_wise_analysis.csv")
+parser = argparse.ArgumentParser()
+parser.add_argument("num_tta")
+
+args, unknown = parser.parse_known_args()
+
+num_tta = args.num_tta
+
+ous_df = pd.read_csv(f"OUS_patient_wise_analysis_{num_tta}TTA.csv")
+maastro_df = pd.read_csv(f"MAASTRO_patient_wise_analysis_{num_tta}TTA.csv")
 
 # Combine DataFrames
 ous_df["source"] = "OUS"  # Add identifier column
@@ -37,7 +46,7 @@ plt.legend()
 plt.grid(True, alpha=0.3)
 
 # Save the plot to a PDF file
-plt.savefig('iou_vs_dice.pdf', format='pdf', bbox_inches='tight')
+plt.savefig(f'iou_vs_dice_{num_tta}.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
@@ -47,22 +56,22 @@ print('Working on average cross dice score vs original dice score visualization.
 # Create scatter plot
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
-    plt.scatter(subset["original_dice_score"], subset["mean_dice_15"], label=source)
+    plt.scatter(subset["original_dice_score"], subset[f"mean_dice_{num_tta}"], label=source)
     # Calculate Spearman's correlation coefficient
-    correlation, p_value = spearmanr(subset["original_dice_score"], subset["mean_dice_15"])
+    correlation, p_value = spearmanr(subset["original_dice_score"], subset[f"mean_dice_{num_tta}"])
     # Store values in dictionaries
-    spearman_corr_dict[f"{source} original_dice_vs_mean_cross_dice_15"] = correlation
-    p_value_dict[f"{source} original_dice_vs_mean_cross_dice_15"] = p_value
+    spearman_corr_dict[f"{source} original_dice_vs_mean_cross_dice_{num_tta}"] = correlation
+    p_value_dict[f"{source} original_dice_vs_mean_cross_dice_{num_tta}"] = p_value
 
 # Labels and title
 plt.xlabel("Original DSC")
-plt.ylabel("Mean Cross Dice Score (15 TTA)")
+plt.ylabel(f"Mean Cross Dice Score ({num_tta} TTA)")
 #plt.title("Scatter Plot of Mean Cross Dice Score vs. Original Dice Score")
 plt.legend()
 plt.grid(True, alpha=0.3)
 
 # Save the plot to a PDF file
-plt.savefig('crossdice_vs_orgdice.pdf', format='pdf', bbox_inches='tight')
+plt.savefig(f'crossdice_vs_orgdice_{num_tta}.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
@@ -87,7 +96,7 @@ plt.legend()
 plt.grid(True, alpha=0.3)
 
 # Save the plot to a PDF file
-plt.savefig('entropy_region_vs_orgdice.pdf', format='pdf', bbox_inches='tight')
+plt.savefig(f'entropy_region_vs_orgdice_{num_tta}.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
@@ -111,7 +120,7 @@ plt.legend()
 plt.grid(True, alpha=0.3)
 
 # Save the plot to a PDF file
-plt.savefig('volume_vs_orgdice.pdf', format='pdf', bbox_inches='tight')
+plt.savefig(f'volume_vs_orgdice_{num_tta}.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
@@ -120,9 +129,9 @@ print('Working on volume vs uncertainty visualization.....')
 # Create scatter plot
 plt.figure(figsize=(8, 4))
 for source, subset in df.groupby("source"):
-    plt.scatter(subset["mean_dice_15"], subset["actual_vol"], label=source)
+    plt.scatter(subset[f"mean_dice_{num_tta}"], subset["actual_vol"], label=source)
     # Calculate Spearman's correlation coefficient
-    correlation, p_value = spearmanr(subset["mean_dice_15"], subset["actual_vol"])
+    correlation, p_value = spearmanr(subset[f"mean_dice_{num_tta}"], subset["actual_vol"])
     # Store values in dictionaries
     spearman_corr_dict[f"{source} cross_dice_vs_actual_vol"] = correlation
     p_value_dict[f"{source} cross_dice_vs_actual_vol"] = p_value
@@ -136,7 +145,7 @@ plt.legend()
 plt.grid(True, alpha=0.3)
 
 # Save the plot to a PDF file
-plt.savefig('volume_vs_crossdice.pdf', format='pdf', bbox_inches='tight')
+plt.savefig(f'volume_vs_crossdice_{num_tta}.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
@@ -149,7 +158,7 @@ results = pd.DataFrame({
 })
 
 # Save as a CSV file
-results.to_csv("spearman_results.csv", index=False)
+results.to_csv(f"spearman_results_{num_tta}TTA.csv", index=False)
 
 # Print to verify
 print(results)
