@@ -65,7 +65,7 @@ for source, subset in df.groupby("source"):
 
 # Labels and title
 plt.xlabel("Original DSC")
-plt.ylabel(f"Mean Cross Dice Score ({num_tta} TTA)")
+plt.ylabel(f"Mean Cross-DSC ({num_tta} TTA)")
 #plt.title("Scatter Plot of Mean Cross Dice Score vs. Original Dice Score")
 plt.legend()
 plt.grid(True, alpha=0.3)
@@ -140,7 +140,7 @@ for source, subset in df.groupby("source"):
 
 
 # Labels and title
-plt.xlabel("Mean Cross Dice Score")
+plt.xlabel("Mean Cross-DSC")
 plt.ylabel("Actual Volume")
 plt.yticks(rotation=45)
 #plt.title("Scatter Plot of Actual Volume vs. Mean Cross Dice Score")
