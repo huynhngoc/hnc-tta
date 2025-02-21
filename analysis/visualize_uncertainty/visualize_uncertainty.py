@@ -179,7 +179,7 @@ class VisualizeUncertaintyMapV2:
             ax_uncertain.legend(
                 [data['iou_mask'].legend_elements()[0][0],
                  data['iou_pred'].legend_elements()[0][0]],
-                ['Ground Truth (g)', 'Predicted (c)'],
+                ['Ground Truth', 'Predicted'],
                 loc='right', bbox_to_anchor=(1.8, 0.5),
                 # ncol=2,
             )
