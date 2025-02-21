@@ -51,7 +51,7 @@ ax1.plot(num_tta_cols, ous_mean_values, label='Mean of all patients', color='bla
 
 # Add labels and title
 ax1.set_xlabel('Number of TTA-predictions')
-ax1.set_ylabel('Mean Cross Dice Score')
+ax1.set_ylabel('Mean Cross-DSC')
 #ax1.title('OUS Dataset : Mean Cross Dice Score vs. \n Number of TTA-predictions with example trends')
 ax1.set_title('OUS Dataset')
 ax1.legend(loc='lower left')
@@ -116,7 +116,7 @@ ax2.plot(num_tta_cols, MAASTRO_mean_values, label='Mean of all patients', color=
 
 # Add labels and title
 ax2.set_xlabel('Number of TTA')
-ax2.set_ylabel('Mean Cross Dice Score')
+ax2.set_ylabel('Mean Cross-DSC')
 #ax2.title('MAASTRO Dataset : Mean Cross Dice Score vs. \n Number of TTA-predictions with example trends')
 ax2.set_title('MAASTRO Dataset')
 ax2.legend(loc='lower left')
