@@ -40,7 +40,7 @@ MAASTRO_patient_threshold_index = []
 for pid in patient_ids:
     patient_data = ous_df[ous_df['pid'] == pid][num_tta_cols].values.flatten()
     ous_patient_threshold_index.append(find_threshold_index(patient_data, threshold, num_iterations))
-    ax1.plot(num_tta_cols, patient_data, alpha=0.3)
+    ax1.plot(num_tta_cols, patient_data, alpha=0.8)
 
 ax1.set_xlabel('Number of TTA-predictions')
 ax1.set_ylabel('IoU')
@@ -72,11 +72,11 @@ print(ous_25_percentile_index)
 print(ous_75_percentile_index)
 """
 # Box Plot
-ax4 = ax1.twinx()
-sns.boxplot(x=ous_patient_threshold_index, ax=ax4, width=0.2, color='lightcoral', fliersize=3, boxprops={'alpha': 0.5}, whiskerprops={'alpha': 0.5}, capprops={'alpha': 0.5}, medianprops={'alpha': 0.7})  # Adjust width to fit
+#ax4 = ax1.twinx()
+#sns.boxplot(x=ous_patient_threshold_index, ax=ax4, width=0.2, color='lightcoral', fliersize=3, boxprops={'alpha': 0.5}, whiskerprops={'alpha': 0.5}, capprops={'alpha': 0.5}, medianprops={'alpha': 0.7})  # Adjust width to fit
 
 # Add vertical lines for mean and percentiles for OUS
-ax1.axvline(x=num_tta_cols[ous_mean_threshold_index], color='red', linestyle='--', label=f'Mean steady state index.\nDifference threshold = {threshold}, consecutive iterations = {num_iterations}')
+#ax1.axvline(x=num_tta_cols[ous_mean_threshold_index], color='red', linestyle='--', label=f'Mean steady state index.\nDifference threshold = {threshold}, consecutive iterations = {num_iterations}')
 #ax1.axvline(x=num_tta_cols[ous_mean_threshold_index + ous_std_threshold_index], color='green', linestyle='--', label=f'std')
 #ax1.axvline(x=num_tta_cols[ous_mean_threshold_index - ous_std_threshold_index], color='green', linestyle='--', label=f'std')
 
@@ -105,7 +105,7 @@ num_tta_cols = MAASTRO_df.columns[1:]  # Assuming the first column is 'pid'
 for pid in patient_ids:
     patient_data = MAASTRO_df[MAASTRO_df['pid'] == pid][num_tta_cols].values.flatten()
     MAASTRO_patient_threshold_index.append(find_threshold_index(patient_data, threshold, num_iterations))
-    ax2.plot(num_tta_cols, patient_data, alpha=0.3)
+    ax2.plot(num_tta_cols, patient_data, alpha=0.8)
 
 ax2.set_xlabel('Number of TTA-predictions')
 ax2.set_ylabel('IoU')
@@ -127,22 +127,22 @@ MAASTRO_median_threshold_index = int(np.median(MAASTRO_patient_threshold_index))
 #print(len(num_tta_cols))
 #print('median', MAASTRO_median_threshold_index)
 
-ax2.axvline(x=num_tta_cols[MAASTRO_mean_threshold_index], color='red', linestyle='--', label=f'Mean steady state index.\nDifference threshold = {threshold}, consecutive iterations = {num_iterations}')
+#ax2.axvline(x=num_tta_cols[MAASTRO_mean_threshold_index], color='red', linestyle='--', label=f'Mean steady state index.\nDifference threshold = {threshold}, consecutive iterations = {num_iterations}')
 #ax2.axvline(x=num_tta_cols[MAASTRO_mean_threshold_index + MAASTRO_std_threshold_index], color='green', linestyle='--', label=f'std')
 #ax2.axvline(x=num_tta_cols[MAASTRO_mean_threshold_index - MAASTRO_std_threshold_index], color='green', linestyle='--', label=f'std')
 ax2.legend(loc='lower left')
 ax2.set_ylim(0.0, 1.0)
 
 # Box Plot
-ax3 = ax2.twinx()
-sns.boxplot(x=MAASTRO_patient_threshold_index, ax=ax3, width=0.2, color='lightcoral', fliersize=3, boxprops={'alpha': 0.5}, whiskerprops={'alpha': 0.5}, capprops={'alpha': 0.5}, medianprops={'alpha': 0.7})  # Adjust width to fit
+#ax3 = ax2.twinx()
+#sns.boxplot(x=MAASTRO_patient_threshold_index, ax=ax3, width=0.2, color='lightcoral', fliersize=3, boxprops={'alpha': 0.5}, whiskerprops={'alpha': 0.5}, capprops={'alpha': 0.5}, medianprops={'alpha': 0.7})  # Adjust width to fit
 
 
 #fig.suptitle('Finding the average steady state', fontsize=12, y=0.95)
 plt.tight_layout(pad=3) 
 
 # Save the plot to a PDF file
-plt.savefig('IoU_dev_steady_state.pdf', format='pdf', bbox_inches='tight')
+plt.savefig('IoU_dev.pdf', format='pdf', bbox_inches='tight')
 
 # Show the plot
 plt.show()
