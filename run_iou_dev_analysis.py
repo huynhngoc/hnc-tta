@@ -32,7 +32,7 @@ if __name__ == '__main__':
     for i in range(2, num_tta + 1):
         # Read the original CSV file
         ous_df = pd.read_csv(base_path + f'/OUS_analysis/iou_{i:02d}.csv')
-    
+        ous_df.rename(columns={'iou': f'iou_{i:02d}'}, inplace=True)
         
         # Merge the iou values into the transformed DataFrame
         if ous_transformed_df.empty:
@@ -49,7 +49,8 @@ if __name__ == '__main__':
     for i in range(2, num_tta + 1):
         # Read the original CSV file
         MAASTRO_df = pd.read_csv(base_path + f'/MAASTRO_analysis/iou_{i:02d}.csv')
-    
+        MAASTRO_df.rename(columns={'iou': f'iou_{i:02d}'}, inplace=True)
+
         
         # Merge the iou values into the transformed DataFrame
         if MAASTRO_transformed_df.empty:
