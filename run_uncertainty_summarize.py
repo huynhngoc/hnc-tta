@@ -113,7 +113,7 @@ if __name__ == '__main__':
         true_positive = (y_pred > 0.5).astype(float) * y_true
         false_positive = (y_pred > 0.5).astype(float) - true_positive
         false_negative = y_true - true_positive
-        true_negative = 
+        true_negative = np.ones_like(y_true) - (true_positive + false_positive + false_negative)
 
         data.append({
             'pid': pid,
@@ -167,6 +167,8 @@ if __name__ == '__main__':
         true_positive = (y_pred > 0.5).astype(float) * y_true
         false_positive = (y_pred > 0.5).astype(float) - true_positive
         false_negative = y_true - true_positive
+        true_negative = np.ones_like(y_true) - (true_positive + false_positive + false_negative)
+
 
         data.append({
             'pid': pid,
@@ -177,12 +179,14 @@ if __name__ == '__main__':
             'predicted_vol': (y_pred > 0.5).astype(float).sum(),
             'actual_vol': y_true.sum(),
             'TP_vol': (true_positive > 0).astype(float).sum(),
+            'TN_vol': (true_negative > 0).astype(float).sum(),
             'FP_vol': (false_positive > 0).astype(float).sum(),
             'FN_vol': (false_negative > 0).astype(float).sum(),
             'sum_entropy': uncertainty_map.sum(),
             'mean_entropy': uncertainty_map.mean(),
             'entropy_region': (uncertainty_map[y_pred > 0.5]).sum(),
             'entropy_TP': (uncertainty_map[true_positive > 0]).sum(),
+            'entropy_TN': (uncertainty_map[true_negative > 0]).sum(),
             'entropy_FP': (uncertainty_map[false_positive > 0]).sum(),
             'entropy_FN': (uncertainty_map[false_negative > 0]).sum(),
             'entropy_over_05_%': (uncertainty_map > 0.05).astype(float).sum(),
