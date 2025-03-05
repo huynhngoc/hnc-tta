@@ -14,15 +14,27 @@ args, unknown = parser.parse_known_args()
 
 num_tta = args.num_tta
 
-ous_df = pd.read_csv(f"OUS_average_{num_tta}.csv")
-maastro_df = pd.read_csv(f"MAASTRO_average_{num_tta}.csv")
+ous_df_tta = pd.read_csv(f"OUS_average_{num_tta}.csv")
+maastro_df_tta = pd.read_csv(f"MAASTRO_average_{num_tta}.csv")
 
 # Combine DataFrames
-ous_df["source"] = "OUS"  # Add identifier column
-maastro_df["source"] = "MAASTRO"  # Add identifier column
-df = pd.concat([ous_df, maastro_df])  # Merge datasets
-#print(df.head())
-#print(df.tail())
+ous_df_tta["source"] = "OUS"  # Add identifier column
+maastro_df_tta["source"] = "MAASTRO"  # Add identifier column
+df_tta = pd.concat([ous_df_tta, maastro_df_tta])  # Merge datasets
+df_tta["method"] = "TTA"
+
+ous_df_mc = pd.read_csv(f"MCdropout_OUS_average_{num_tta}.csv", sep=';')
+maastro_df_mc = pd.read_csv(f"MCdropout_MAASTRO_average_{num_tta}.csv", sep=',')
+ous_df_mc["source"] = "OUS"  # Add identifier column
+maastro_df_mc["source"] = "MAASTRO"  # Add identifier column
+df_mc = pd.concat([ous_df_mc, maastro_df_mc])  # Merge datasets
+df_mc["method"] = "MC"
+#df_mc["pid"] = df_mc['pid'].astype(int)
+
+#print(ous_df_mc.head())
+#print(maastro_df_mc.head())
+print(df_mc.tail())
+exit()
 
 df['entropy_TP_norm'] = df['entropy_TP'] / df['TP_vol']
 df['entropy_FP_norm'] = df['entropy_FP'] / df['FP_vol']
