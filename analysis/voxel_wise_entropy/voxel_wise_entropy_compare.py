@@ -52,30 +52,52 @@ df_mc['entropy_FN_norm'] = df_mc['entropy_FN'] / df_mc['FN_vol']
 df['entropy_TP_norm'] = df['entropy_TP'] / df['TP_vol']
 df['entropy_FP_norm'] = df['entropy_FP'] / df['FP_vol']
 df['entropy_FN_norm'] = df['entropy_FN'] / df['FN_vol']
+"""
+TP_mean_tta = df_tta['entropy_TP_norm'].mean()
+TP_median_tta = df_tta['entropy_TP_norm'].median()
+TP_std_tta = df_tta['entropy_TP_norm'].std()
+TP_25_tta = df_tta['entropy_TP_norm'].quantile(0.25)
+TP_25_tta = df_tta['entropy_TP_norm'].quantile(0.25)
+TP_75_tta = df_tta['entropy_TP_norm'].quantile(0.75)
+print(f"TP mean: {TP_mean_tta}, std: {TP_std_tta}, median: {TP_median_tta}, 25th percentile: {TP_25_tta}, 75th percentile: {TP_75_tta}")
 
-TP_mean = df['entropy_TP_norm'].mean()
-TP_median = df['entropy_TP_norm'].median()
-TP_std = df['entropy_TP_norm'].std()
-TP_25 = df['entropy_TP_norm'].quantile(0.25)
-TP_25 = df['entropy_TP_norm'].quantile(0.25)
-TP_75 = df['entropy_TP_norm'].quantile(0.75)
-print(f"TP mean: {TP_mean}, std: {TP_std}, median: {TP_median}, 25th percentile: {TP_25}, 75th percentile: {TP_75}")
+FP_mean_tta = df_tta['entropy_FP_norm'].mean()
+FP_median_tta = df_tta['entropy_FP_norm'].median()
+FP_std_tta = df_tta['entropy_FP_norm'].std()
+FP_25_tta = df_tta['entropy_FP_norm'].quantile(0.25)
+FP_75_tta = df_tta['entropy_FP_norm'].quantile(0.75)
+print(f"FP mean: {FP_mean_tta}, std: {FP_std_tta}, median: {FP_median_tta}, 25th percentile: {FP_25_tta}, 75th percentile: {FP_75_tta}")
 
-FP_mean = df['entropy_FP_norm'].mean()
-FP_median = df['entropy_FP_norm'].median()
-FP_std = df['entropy_FP_norm'].std()
-FP_25 = df['entropy_FP_norm'].quantile(0.25)
-FP_75 = df['entropy_FP_norm'].quantile(0.75)
-print(f"FP mean: {FP_mean}, std: {FP_std}, median: {FP_median}, 25th percentile: {FP_25}, 75th percentile: {FP_75}")
+FN_mean_tta = df_tta['entropy_FN_norm'].mean()
+FN_median_tta = df_tta['entropy_FN_norm'].median()
+FN_std_tta = df_tta['entropy_FN_norm'].std()
+FN_25_tta = df_tta['entropy_FN_norm'].quantile(0.25)
+FN_75_tta = df_tta['entropy_FN_norm'].quantile(0.75)
+print(f"FN mean: {FN_mean_tta}, std: {FN_std_tta}, median: {FN_median_tta}, 25th percentile: {FN_25_tta}, 75th percentile: {FN_75_tta}")
 
-FN_mean = df['entropy_FN_norm'].mean()
-FN_median = df['entropy_FN_norm'].median()
-FN_std = df['entropy_FN_norm'].std()
-FN_25 = df['entropy_FN_norm'].quantile(0.25)
-FN_75 = df['entropy_FN_norm'].quantile(0.75)
-print(f"FN mean: {FN_mean}, std: {FN_std}, median: {FN_median}, 25th percentile: {FN_25}, 75th percentile: {FN_75}")
+TP_mean_mc = df_mc['entropy_TP_norm'].mean()
+TP_median_mc = df_mc['entropy_TP_norm'].median()
+TP_std_mc = df_mc['entropy_TP_norm'].std()
+TP_25_mc = df_mc['entropy_TP_norm'].quantile(0.25)
+TP_25_mc = df_mc['entropy_TP_norm'].quantile(0.25)
+TP_75_mc = df_mc['entropy_TP_norm'].quantile(0.75)
+print(f"TP mean: {TP_mean_mc}, std: {TP_std_mc}, median: {TP_median_mc}, 25th percentile: {TP_25_mc}, 75th percentile: {TP_75_mc}")
 
+FP_mean_mc = df_mc['entropy_FP_norm'].mean()
+FP_median_mc = df_mc['entropy_FP_norm'].median()
+FP_std_mc = df_mc['entropy_FP_norm'].std()
+FP_25_mc = df_mc['entropy_FP_norm'].quantile(0.25)
+FP_75_mc = df_mc['entropy_FP_norm'].quantile(0.75)
+print(f"FP mean: {FP_mean_mc}, std: {FP_std_mc}, median: {FP_median_mc}, 25th percentile: {FP_25_mc}, 75th percentile: {FP_75_mc}")
 
+FN_mean_mc = df_mc['entropy_FN_norm'].mean()
+FN_median_mc = df_mc['entropy_FN_norm'].median()
+FN_std_mc = df_mc['entropy_FN_norm'].std()
+FN_25_mc = df_mc['entropy_FN_norm'].quantile(0.25)
+FN_75_mc = df_mc['entropy_FN_norm'].quantile(0.75)
+print(f"FN mean: {FN_mean_mc}, std: {FN_std_mc}, median: {FN_median_mc}, 25th percentile: {FN_25_mc}, 75th percentile: {FN_75_mc}")
+exit()
+"""
 TN_mean = df['entropy_TN_norm'].mean()
 TN_median = df['entropy_TN_norm'].median()
 TN_std = df['entropy_TN_norm'].std()
@@ -95,6 +117,8 @@ label_map = {
     'entropy_FN_norm': 'False Negatives',
 }
 #custom_palette = {"TTA": "lightseagreen", "MC": "orchid"}
+custom_palette = {"OUS": "lightseagreen", "MAASTRO": "orchid"}
+
 
 # Apply the mapping
 df_new_tta['class'] = df_new_tta['class'].map(label_map)
@@ -105,17 +129,19 @@ df_new_mc['class'] = df_new_mc['class'].map(label_map)
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6, 8))
 
 # First boxplot on ax1
-sns.boxplot(data=df_new_tta, x="class", y="Entropy", hue="source", showmeans=True, whis=(0.05, 0.95), 
+sns.boxplot(data=df_new_tta, x="class", y="Entropy", hue="source", showmeans=True, palette=custom_palette,
             meanprops={"marker": "o", "markerfacecolor": "indigo", "markeredgecolor": "black"}, ax=ax1)
 ax1.set_xlabel("")
 ax1.legend(title=None, loc="upper left", bbox_to_anchor=(0.02, 0.98), ncol=2)
-ax1.set_title("TTA")
+ax1.set_title("Test Time Augmentation")
 # Second boxplot on ax2
-sns.boxplot(data=df_new_mc, x="class", y="Entropy", hue="source", showmeans=True, whis=(0.05, 0.95), 
+sns.boxplot(data=df_new_mc, x="class", y="Entropy", hue="source", showmeans=True, palette=custom_palette, 
             meanprops={"marker": "o", "markerfacecolor": "indigo", "markeredgecolor": "black"}, ax=ax2)
 ax2.set_xlabel("")
 ax2.legend(title=None, loc="upper left", bbox_to_anchor=(0.02, 0.98), ncol=2)
-ax2.set_title("MC")
+ax2.set_title("Monte Carlo Dropout")
+plt.tight_layout(pad=3) 
+
 # Save the figure
 plt.savefig(f'voxel_wise_entropy_compare_subplot_{num_tta}.pdf', format='pdf', bbox_inches='tight')
 
