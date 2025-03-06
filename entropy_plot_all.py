@@ -32,12 +32,12 @@ for pid in ous_pids:
     selected_TP = (y_true * y_pred) > 0
     selected_FP = ((1-y_true) * y_pred) > 0
     selected_FN = (y_true * (1-y_pred)) > 0
-    # selected_TN = ((1-y_true) * (1-y_pred)) > 0
+    selected_TN = ((1-y_true) * (1-y_pred)) > 0
 
     TP = uncertainty_map[selected_TP].flatten()
     FP = uncertainty_map[selected_FP].flatten()
     FN = uncertainty_map[selected_FN].flatten()
-    # TN = uncertainty_map[selected_TN].flatten()
+    TN = uncertainty_map[selected_TN].flatten()
 
     data.extend(
         [{'pid': pid, 'entropy': d, 'center': 'OUS', 'area': 'TP'} for d in TP])
