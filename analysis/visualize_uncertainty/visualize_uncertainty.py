@@ -376,10 +376,10 @@ for i in range(2, num_samples+1):
     union = union + new_pred
 """
 num_samples = 15
-patient_id = 82
+patient_id = 52
 uncertainty_map = np.zeros((173, 191, 265, 1))
 
-folder_path = '/Users/bruker/Desktop/Master'
+folder_path = f'/Users/bruker/Desktop/Master/MAASTRO_{patient_id}'
 umap_path = os.path.join(folder_path, f'uncertainty_map_pid_{patient_id}.npy')
 image_path = os.path.join(folder_path, f'pid_{patient_id}.npy')
 
