@@ -113,8 +113,8 @@ class VisualizeUncertaintyMapV2:
         self.idx_2 = np.argmax(self.mask.sum(axis=(0, 1, 3)))
         self.uncertainty_threshold = 0.05
         self.image_data = [{}, {}, {}]
-        self.mask_color = '#7fffd4'
-        self.pred_color = '#603fef'
+        self.mask_color = '#7fffd4' 
+        self.pred_color = '#603fef' # , , #f91cfc
         # mask_color = '#7fffd4'
         # pred_color = '#603fef'
 
@@ -381,7 +381,7 @@ for i in range(2, num_samples+1):
 #num_samples = 15
 patient_id = 82
 uncertainty_map = np.zeros((173, 191, 265, 1))
-tta_idx = 13
+tta_idx = 1
 
 folder_path = f'/Users/bruker/Desktop/Master/OUS_{patient_id}'
 umap_path = os.path.join(folder_path, f'uncertainty_map_pid_{patient_id}.npy')
@@ -391,7 +391,7 @@ tta_prediction_path = os.path.join(folder_path, f'pid_{patient_id}_tta_{tta_idx:
 with open(umap_path, 'rb') as f:
     uncertainty_map = np.load(f)
 
-umap_max = uncertainty_map.max()
+"""umap_max = uncertainty_map.max()
 
 # Define the colormap and normalization
 cmap = cm.get_cmap("Reds")
@@ -405,9 +405,9 @@ cb1 = plt.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap),
                     cax=ax, orientation='horizontal')
 
 # Add labels
-cb1.set_label("Value")
-plt.show()
-
+cb1.set_label("Entropy")
+#plt.show()
+#exit()"""
 
 with open(image_path, 'rb') as f:
 	y_true = np.load(f)
