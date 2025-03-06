@@ -67,7 +67,7 @@ with open(base_path + f'/MAASTRO_uncertainty_map_visualization//{num_tta:02d}/pi
             np.save(f, y_pred)
             np.save(f, image)
 
-
+exit()
 print("Preperations for interactive visualization")
 print('OUS')
 
