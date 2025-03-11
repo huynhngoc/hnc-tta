@@ -5,6 +5,8 @@ import os
 import h5py
 import matplotlib.cm as cm
 from deoxys.data.preprocessor import preprocessor_from_config
+import json
+
 
 
 
@@ -25,10 +27,10 @@ def augment_image(image, preprocessors):
         image = preprocessor.transform(image, None)
     return image
 
-#augment_image(images, preprocessors)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("name")
+parser.add_argument("config")
 #parser.add_argument("num_tta", type=int)
 parser.add_argument("pid")
 parser.add_argument("source")
@@ -40,14 +42,21 @@ source = args.source
 base_path = source + '/analysis/' + args.name
 #num_tta = args.num_tta  
 pid = args.pid
+with open(args.config, 'r') as file:
+        config = json.load(file)
 
-output_type = "image"
+preprocessors = []
+for pp_config in config:
+    preprocessors.append(preprocessor_from_config(pp_config))
+
+
+#output_type = "image"
 center = "OUS"
 
-if not os.path.exists(base_path + f'/{center}_input_visualization'):
-    os.makedirs(base_path + f'/{center}_input_visualization')
-if not os.path.exists(base_path + f'/{center}_input_visualization/{output_type}'):
-    os.makedirs(base_path + f'/{center}_input_visualization/{output_type}')
+if not os.path.exists(base_path + f'/{center}_augmentation_visualization'):
+    os.makedirs(base_path + f'/{center}_augmentation_visualization')
+"""if not os.path.exists(base_path + f'/{center}_augmentation_visualization/{output_type}'):
+    os.makedirs(base_path + f'/{center}_augmentation_visualization/{output_type}')"""
 
 """
 if not os.path.exists(base_path + '/MAASTRO_input_visualization'):
@@ -64,6 +73,10 @@ if center == "MAASTRO":
         image = f['x'][str(pid)][:]
     
 
+    
+    image_aug = augment_image(image, preprocessors)
+    
+    
     image2d = image[:, :, 87]
 
     # Visualize the slice
