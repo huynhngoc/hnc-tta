@@ -57,10 +57,12 @@ if center == "MAASTRO":
         image = f['x'][str(pid)][:]
     
 
-    slice_data = image[:, :, 87]
+    image2d = image[:, :, 87]
 
     # Visualize the slice
-    plt.imshow(slice_data)
+    plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
+    plt.imshow(apply_cmap_with_blend(image2d[..., 1],
+                                  'inferno', vmin=0, vmax=1), origin='lower')
     plt.title(f'PID: {pid}')
     plt.xlabel('X-axis')
     plt.ylabel('Y-axis')
