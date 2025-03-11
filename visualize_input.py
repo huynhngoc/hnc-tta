@@ -4,6 +4,20 @@ import argparse
 import os
 import h5py
 
+def apply_cmap_with_blend(functional_data, cmap, vmin=None, vmax=None, gamma=1):
+    functional_data = functional_data.astype(float)
+    if vmin is None:
+                    vmin = functional_data.min()
+    if vmax is None:
+                    vmax = functional_data.max()
+    functional_data = (functional_data - vmin) / (vmax - vmin)
+    functional_data = np.minimum(np.maximum(functional_data, 0), 1) ** gamma
+    image = cm.get_cmap(cmap)(functional_data)
+    image[..., -1] = functional_data
+    return image
+
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument("name")
 #parser.add_argument("num_tta", type=int)
@@ -64,6 +78,9 @@ if center == "OUS":
     
     
     plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
+    plt.imshow(apply_cmap_with_blend(image2d[..., 1],
+                                  'inferno', vmin=0, vmax=1), origin='lower')
+
     # Visualize the slice
     #plt.imshow(slice_data)
     plt.title(f'PID: {pid}')
