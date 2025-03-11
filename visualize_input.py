@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import argparse
 import os
 import h5py
+import matplotlib.cm as cm
+
 
 def apply_cmap_with_blend(functional_data, cmap, vmin=None, vmax=None, gamma=1):
     functional_data = functional_data.astype(float)
