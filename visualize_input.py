@@ -63,7 +63,7 @@ if center == "OUS":
     image2d = image[:, :, 87]
     
     
-    plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower'))
+    plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
     # Visualize the slice
     #plt.imshow(slice_data)
     plt.title(f'PID: {pid}')
