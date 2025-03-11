@@ -6,8 +6,8 @@
 #SBATCH --partition=smallmem # Use the verysmallmem-partition for jobs requiring < 10 GB RAM.
 #SBATCH --mail-user=anine.lome@nmbu.no # Email me when job is done.
 #SBATCH --mail-type=FAIL
-#SBATCH --output=outputs/uncertainty-visualize-%A-%a.out
-#SBATCH --error=outputs/uncertainty-visualize-%A-%a.out
+#SBATCH --output=outputs/visualize_input-%A-%a.out
+#SBATCH --error=outputs/visualize_input-%A-%a.out
 #SBATCH --input=inputs/all-no.in
 
 # If you would like to use more please adjust this.
