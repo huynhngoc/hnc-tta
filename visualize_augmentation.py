@@ -37,6 +37,7 @@ parser.add_argument("source")
 
 args, unknown = parser.parse_known_args()
 
+print("Defining arguments...")
 # Define the base path and pid
 source = args.source
 base_path = source + '/analysis/' + args.name
@@ -45,6 +46,7 @@ pid = args.pid
 with open(args.config, 'r') as file:
         config = json.load(file)
 
+print("Loading preprocessors...")
 preprocessors = []
 for pp_config in config:
     preprocessors.append(preprocessor_from_config(pp_config))
@@ -53,6 +55,7 @@ for pp_config in config:
 #output_type = "image"
 center = "OUS"
 
+print("Creating directories...")
 if not os.path.exists(base_path + f'/{center}_augmentation_visualization'):
     os.makedirs(base_path + f'/{center}_augmentation_visualization')
 """if not os.path.exists(base_path + f'/{center}_augmentation_visualization/{output_type}'):
@@ -67,6 +70,7 @@ if not os.path.exists(base_path + f'/MAASTRO_input_visualization/{output_type}')
 """
 
 if center == "MAASTRO":
+    print("running MAASTRO...")
     with h5py.File(source + '/segmentation/maastro_full.h5', 'r') as f:
         y_true = f['y'][str(pid)][:]
         y_pred = f['predicted'][str(pid)][:]
@@ -93,6 +97,7 @@ if center == "MAASTRO":
 
 
 if center == "OUS":
+    print("running OUS...")
     with h5py.File(source + '/segmentation/ous_test.h5', 'r') as f:
         y_true = f['y'][str(pid)][:]
         y_pred = f['predicted'][str(pid)][:]
