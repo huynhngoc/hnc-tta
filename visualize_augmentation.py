@@ -103,6 +103,7 @@ if center == "OUS":
         image = f['x'][str(pid)][:]
     
     for preprocessor in preprocessors:
+        iter += 1
         name = preprocessor.__class__.__name__
         image = preprocessor.transform(image, None)
         image2d = image[:, :, 87]
@@ -119,6 +120,6 @@ if center == "OUS":
         if not os.path.exists(base_path + f'/OUS_augmentation_visualization/{name}'):
             os.makedirs(base_path + f'/OUS_augmentation_visualization/{name}')
 
-        output_path = f'{base_path}/OUS_augmentation_visualization/{name}/pid_{pid}_slice.pdf'
+        output_path = f'{base_path}/OUS_augmentation_visualization/{name}/pid_{pid}_{iter}.pdf'
         plt.savefig(output_path, format='pdf')
 
