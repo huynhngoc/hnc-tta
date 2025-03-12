@@ -19,7 +19,7 @@ module load singularity
 ## Code
 # If data files aren't copied, do so
 #!/bin/bash
-if [ $# -lt 2 ];
+if [ $# -lt 3 ];
     then
     printf "Not enough arguments - %d\n" $#
     exit 0
@@ -34,7 +34,7 @@ echo "Finished seting up files."
 export RAY_ROOT=$TMPDIR/ray
 export MAX_SAVE_STEP_GB=0
 rm -rf $TMPDIR/ray/*
-singularity exec --nv deoxys.sif python -u visualize_augmentation.py $1 $2 $PROJECTS/ngoc/TTA
+singularity exec --nv deoxys.sif python -u visualize_augmentation.py $1 $2 $3 $PROJECTS/ngoc/TTA
 
 # echo "Finished training. Post-processing results"
 

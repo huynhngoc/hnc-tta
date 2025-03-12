@@ -74,22 +74,22 @@ if center == "MAASTRO":
     
 
     
-    image_aug = augment_image(image, preprocessors)
-    
-    
-    image2d = image[:, :, 87]
+    for preprocessor in preprocessors:
+        name = preprocessor.__class__.__name__
+        image = preprocessor.transform(image, None)
+        image2d = image[:, :, 87]
 
-    # Visualize the slice
-    plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
-    plt.imshow(apply_cmap_with_blend(image2d[..., 1],
-                                  'inferno', vmin=0, vmax=1), origin='lower')
-    plt.title(f'PID: {pid}')
-    plt.xlabel('X-axis')
-    plt.ylabel('Y-axis')
+        # Visualize the slice
+        plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
+        plt.imshow(apply_cmap_with_blend(image2d[..., 1],
+                                    'inferno', vmin=0, vmax=1), origin='lower')
+        plt.title(f'PID: {pid}, preprocessor: {name}')
+        plt.xlabel('X-axis')
+        plt.ylabel('Y-axis')
 
-    # Save the figure as a PDF file
-    output_path = f'{base_path}/MAASTRO_input_visualization/{output_type}/pid_{pid}_slice.pdf'
-    plt.savefig(output_path, format='pdf')
+        # Save the figure as a PDF file
+        output_path = f'{base_path}/MAASTRO_augmentation_visualization/{name}/pid_{pid}_slice.pdf'
+        plt.savefig(output_path, format='pdf')
 
 
 if center == "OUS":
@@ -98,20 +98,20 @@ if center == "OUS":
         y_pred = f['predicted'][str(pid)][:]
         image = f['x'][str(pid)][:]
     
-    image2d = image[:, :, 87]
-    
-    
-    plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
-    plt.imshow(apply_cmap_with_blend(image2d[..., 1],
-                                  'inferno', vmin=0, vmax=1), origin='lower')
+    for preprocessor in preprocessors:
+        name = preprocessor.__class__.__name__
+        image = preprocessor.transform(image, None)
+        image2d = image[:, :, 87]
 
-    # Visualize the slice
-    #plt.imshow(slice_data)
-    plt.title(f'PID: {pid}')
-    plt.xlabel('X-axis')
-    plt.ylabel('Y-axis')
+        # Visualize the slice
+        plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
+        plt.imshow(apply_cmap_with_blend(image2d[..., 1],
+                                    'inferno', vmin=0, vmax=1), origin='lower')
+        plt.title(f'PID: {pid}, preprocessor: {name}')
+        plt.xlabel('X-axis')
+        plt.ylabel('Y-axis')
 
-    # Save the figure as a PDF file
-    output_path = f'{base_path}/OUS_input_visualization/{output_type}/pid_{pid}_slice.pdf'
-    plt.savefig(output_path, format='pdf')
+        # Save the figure as a PDF file
+        output_path = f'{base_path}/OUS_augmentation_visualization/{name}/pid_{pid}_slice.pdf'
+        plt.savefig(output_path, format='pdf')
 
