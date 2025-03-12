@@ -2,7 +2,7 @@
 #SBATCH --ntasks=1               # 1 core(CPU)
 #SBATCH --nodes=1                # Use 1 node
 #SBATCH --job-name=uncertainty   # sensible name for the job
-#SBATCH --mem=1G                 # Default memory per CPU is 3GB.
+#SBATCH --mem=16G                 # Default memory per CPU is 3GB.
 #SBATCH --partition=smallmem # Use the verysmallmem-partition for jobs requiring < 10 GB RAM.
 #SBATCH --mail-user=anine.lome@nmbu.no # Email me when job is done.
 #SBATCH --mail-type=FAIL
