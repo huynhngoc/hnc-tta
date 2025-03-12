@@ -51,7 +51,6 @@ preprocessors = []
 for pp_config in config:
     preprocessors.append(preprocessor_from_config(pp_config))
 
-print(preprocessors)
 #output_type = "image"
 center = "OUS"
 
@@ -117,6 +116,9 @@ if center == "OUS":
         plt.ylabel('Y-axis')
 
         # Save the figure as a PDF file
+        if not os.path.exists(base_path + f'/OUS_augmentation_visualization/{name}'):
+            os.makedirs(base_path + f'/OUS_augmentation_visualization/{name}')
+
         output_path = f'{base_path}/OUS_augmentation_visualization/{name}/pid_{pid}_slice.pdf'
         plt.savefig(output_path, format='pdf')
 
