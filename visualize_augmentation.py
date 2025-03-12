@@ -45,13 +45,13 @@ pid = args.pid
 with open(args.config, 'r') as file:
         config = json.load(file)
 
-print(config[0]["config"].items())
+#print(config[0]["config"].items())
 # Create a list with parameter names and values
-param_list = []
+"""param_list = []
 for key, value in config[0]["config"].items():
     print(f"Parameter: {key}, Value: {value}")  # Print parameter name and value
     param_list.append((key, value))  # Store as tuples in the list
-
+"""
 print("Loading preprocessors...")
 preprocessors = []
 for pp_config in config:
@@ -112,7 +112,7 @@ if center == "OUS":
 
         # Visualize the slice
         plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
-        plt.title(f'CT, PID: {pid}, Augmentation: {param_list[0][0]}: {param_list[0][1]}')
+        plt.title(f'CT, PID: {pid}, Augmentation: {aug_type}: 1.5')
         plt.xlabel('X-axis')
         plt.ylabel('Y-axis')
 
@@ -126,7 +126,7 @@ if center == "OUS":
         # Visualize the slice
         plt.imshow(apply_cmap_with_blend(image2d[..., 1],
                                     'inferno', vmin=0, vmax=1), origin='lower')
-        plt.title(f'PET, PID: {pid}, Augmentation: {param_list[0][0]}: {param_list[0][1]}')
+        plt.title(f'PET, PID: {pid}, Augmentation: {aug_type}: 1.5')
         plt.xlabel('X-axis')
         plt.ylabel('Y-axis')
 
