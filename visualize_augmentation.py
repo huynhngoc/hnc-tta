@@ -53,6 +53,7 @@ for pp_config in config:
 
 #output_type = "image"
 center = "OUS"
+aug_type = "brightness"
 
 print("Creating directories...")
 if not os.path.exists(base_path + f'/{center}_augmentation_visualization'):
@@ -76,8 +77,9 @@ if center == "MAASTRO":
         image = f['x'][str(pid)][:]
     
 
-    
+    i = 0
     for preprocessor in preprocessors:
+        i += 1
         name = preprocessor.__class__.__name__
         image = preprocessor.transform(image, None)
         image2d = image[:, :, 87]
@@ -91,7 +93,10 @@ if center == "MAASTRO":
         plt.ylabel('Y-axis')
 
         # Save the figure as a PDF file
-        output_path = f'{base_path}/MAASTRO_augmentation_visualization/{name}/pid_{pid}_slice.pdf'
+        if not os.path.exists(base_path + f'/MAASTRO_augmentation_visualization/{aug_type}'):
+            os.makedirs(base_path + f'/MAASTRO_augmentation_visualization/{aug_type}')
+
+        output_path = f'{base_path}/MAASTRO_augmentation_visualization/{aug_type}/pid_{pid}_{i}.pdf'
         plt.savefig(output_path, format='pdf')
 
 
@@ -112,14 +117,14 @@ if center == "OUS":
         plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
         plt.imshow(apply_cmap_with_blend(image2d[..., 1],
                                     'inferno', vmin=0, vmax=1), origin='lower')
-        plt.title(f'PID: {pid}, preprocessor: {name}')
+        plt.title(f'PID: {pid}, Augmentation: {aug_type}: 1.5')
         plt.xlabel('X-axis')
         plt.ylabel('Y-axis')
 
         # Save the figure as a PDF file
-        if not os.path.exists(base_path + f'/OUS_augmentation_visualization/{name}'):
-            os.makedirs(base_path + f'/OUS_augmentation_visualization/{name}')
+        if not os.path.exists(base_path + f'/OUS_augmentation_visualization/{aug_type}'):
+            os.makedirs(base_path + f'/OUS_augmentation_visualization/{aug_type}')
 
-        output_path = f'{base_path}/OUS_augmentation_visualization/{name}/pid_{pid}_{i}.pdf'
+        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid_{pid}_{i}.pdf'
         plt.savefig(output_path, format='pdf')
 
