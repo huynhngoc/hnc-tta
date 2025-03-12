@@ -101,7 +101,7 @@ if center == "OUS":
         y_true = f['y'][str(pid)][:]
         y_pred = f['predicted'][str(pid)][:]
         image = f['x'][str(pid)][:]
-    
+    i = 0
     for preprocessor in preprocessors:
         i += 1
         name = preprocessor.__class__.__name__
