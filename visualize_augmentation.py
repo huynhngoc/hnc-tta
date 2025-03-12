@@ -43,7 +43,7 @@ source = args.source
 base_path = source + '/analysis/' + args.name
 #num_tta = args.num_tta  
 pid = args.pid
-with open(args.config, 'r') as file:
+with open(source + '/hnc-tta/' + args.config, 'r') as file:
         config = json.load(file)
 
 print("Loading preprocessors...")
