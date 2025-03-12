@@ -1,4 +1,4 @@
-print("Importing libraries...")
+print("Importing libraries...", flush=True)
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
@@ -28,7 +28,7 @@ def augment_image(image, preprocessors):
         image = preprocessor.transform(image, None)
     return image
 
-print("Start")
+print("Start", flush=True)
 parser = argparse.ArgumentParser()
 parser.add_argument("name")
 parser.add_argument("config")
@@ -37,7 +37,7 @@ parser.add_argument("source")
 
 args, unknown = parser.parse_known_args()
 
-print("Defining arguments...")
+print("Defining arguments...", flush=True)
 # Define the base path and pid
 source = args.source
 base_path = source + '/analysis/' + args.name
@@ -95,6 +95,7 @@ if center == "MAASTRO":
 
         output_path = f'{base_path}/MAASTRO_augmentation_visualization/{aug_type}/pid_{pid}_{i}.pdf'
         plt.savefig(output_path, format='pdf')
+        plt.close()
 
 
 if center == "OUS":
@@ -123,5 +124,6 @@ if center == "OUS":
 
         output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid_{pid}_CT.pdf'
         plt.savefig(output_path, format='pdf')
+        plt.close()
 
     
