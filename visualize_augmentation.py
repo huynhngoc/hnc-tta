@@ -51,7 +51,7 @@ preprocessors = []
 for pp_config in config:
     preprocessors.append(preprocessor_from_config(pp_config))
 
-
+print(preprocessors)
 #output_type = "image"
 center = "OUS"
 
