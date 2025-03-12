@@ -36,6 +36,7 @@ export MAX_SAVE_STEP_GB=0
 rm -rf $TMPDIR/ray/*
 singularity exec --nv deoxys.sif python -u visualize_augmentation.py $1 $2 $3 $PROJECTS/ngoc/TTA
 
+echo "Testing"
 # echo "Finished training. Post-processing results"
 
 # singularity exec --nv deoxys.sif python -u post_processing.py /net/fs-1/Ngoc/hnperf/$2 --temp_folder $SCRATCH/hnperf/$2 --analysis_folder $SCRATCH/analysis/$2 ${@:4}
