@@ -27,7 +27,7 @@ def augment_image(image, preprocessors):
         image = preprocessor.transform(image, None)
     return image
 
-
+print("Start")
 parser = argparse.ArgumentParser()
 parser.add_argument("name")
 parser.add_argument("config")
