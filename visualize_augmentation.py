@@ -117,19 +117,16 @@ if center == "OUS":
 
         # Visualize the slice
         plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
-        plt.imshow(apply_cmap_with_blend(image2d[..., 1],
-                                    'inferno', vmin=0, vmax=1), origin='lower')
-        plt.title(f'PID: {pid}, preprocessor: {name}')
+        #plt.imshow(apply_cmap_with_blend(image2d[..., 1],'inferno', vmin=0, vmax=1), origin='lower')
         plt.title(f'PID: {pid}, Augmentation: {aug_type}: 1.5')
         plt.xlabel('X-axis')
         plt.ylabel('Y-axis')
 
         # Save the figure as a PDF file
-        if not os.path.exists(base_path + f'/OUS_augmentation_visualization/{name}'):
-            os.makedirs(base_path + f'/OUS_augmentation_visualization/{name}')
         if not os.path.exists(base_path + f'/OUS_augmentation_visualization/{aug_type}'):
             os.makedirs(base_path + f'/OUS_augmentation_visualization/{aug_type}')
 
-        output_path = f'{base_path}/OUS_augmentation_visualization/{name}/pid_{pid}_{i}.pdf'
-        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid_{pid}_{i}.pdf'
+
+        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid_{pid}_CT.pdf'
         plt.savefig(output_path, format='pdf')
+        plt.close
