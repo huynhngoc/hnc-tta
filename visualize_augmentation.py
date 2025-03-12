@@ -44,7 +44,7 @@ pid = args.pid
 with open(args.config, 'r') as file:
         config = json.load(file)
 
-
+print(config[0]["config"].items())
 # Create a list with parameter names and values
 param_list = []
 for key, value in config[0]["config"].items():
