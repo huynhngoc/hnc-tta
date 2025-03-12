@@ -31,7 +31,6 @@ def augment_image(image, preprocessors):
 parser = argparse.ArgumentParser()
 parser.add_argument("name")
 parser.add_argument("config")
-#parser.add_argument("num_tta", type=int)
 parser.add_argument("pid")
 parser.add_argument("source")
 
@@ -41,33 +40,30 @@ print("Defining arguments...")
 # Define the base path and pid
 source = args.source
 base_path = source + '/analysis/' + args.name
-#num_tta = args.num_tta  
 pid = args.pid
 with open(args.config, 'r') as file:
         config = json.load(file)
+
+
+# Create a list with parameter names and values
+param_list = []
+for key, value in config[0]["config"].items():
+    print(f"Parameter: {key}, Value: {value}")  # Print parameter name and value
+    param_list.append((key, value))  # Store as tuples in the list
 
 print("Loading preprocessors...")
 preprocessors = []
 for pp_config in config:
     preprocessors.append(preprocessor_from_config(pp_config))
 
-#output_type = "image"
+
 center = "OUS"
 aug_type = "brightness"
 
 print("Creating directories...")
 if not os.path.exists(base_path + f'/{center}_augmentation_visualization'):
     os.makedirs(base_path + f'/{center}_augmentation_visualization')
-"""if not os.path.exists(base_path + f'/{center}_augmentation_visualization/{output_type}'):
-    os.makedirs(base_path + f'/{center}_augmentation_visualization/{output_type}')"""
 
-"""
-if not os.path.exists(base_path + '/MAASTRO_input_visualization'):
-    os.makedirs(base_path + '/MAASTRO_input_visualization')
-if not os.path.exists(base_path + f'/MAASTRO_input_visualization/{output_type}'):
-    os.makedirs(base_path + f'/MAASTRO_input_visualization/{output_type}'):
-
-"""
 
 if center == "MAASTRO":
     print("running MAASTRO...")
@@ -115,9 +111,7 @@ if center == "OUS":
 
         # Visualize the slice
         plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
-        plt.imshow(apply_cmap_with_blend(image2d[..., 1],
-                                    'inferno', vmin=0, vmax=1), origin='lower')
-        plt.title(f'PID: {pid}, Augmentation: {aug_type}: 1.5')
+        plt.title(f'CT, PID: {pid}, Augmentation: {param_list[0][0]}: {param_list[0][1]}')
         plt.xlabel('X-axis')
         plt.ylabel('Y-axis')
 
@@ -125,6 +119,19 @@ if center == "OUS":
         if not os.path.exists(base_path + f'/OUS_augmentation_visualization/{aug_type}'):
             os.makedirs(base_path + f'/OUS_augmentation_visualization/{aug_type}')
 
-        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid_{pid}_{i}.pdf'
+        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid_{pid}_CT.pdf'
         plt.savefig(output_path, format='pdf')
 
+        # Visualize the slice
+        plt.imshow(apply_cmap_with_blend(image2d[..., 1],
+                                    'inferno', vmin=0, vmax=1), origin='lower')
+        plt.title(f'PET, PID: {pid}, Augmentation: {param_list[0][0]}: {param_list[0][1]}')
+        plt.xlabel('X-axis')
+        plt.ylabel('Y-axis')
+
+        # Save the figure as a PDF file
+        if not os.path.exists(base_path + f'/OUS_augmentation_visualization/{aug_type}'):
+            os.makedirs(base_path + f'/OUS_augmentation_visualization/{aug_type}')
+
+        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid_{pid}_PET.pdf'
+        plt.savefig(output_path, format='pdf')
