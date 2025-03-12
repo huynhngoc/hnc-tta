@@ -77,7 +77,7 @@ if center == "MAASTRO":
         image = f['x'][str(pid)][:]
 
     for preprocessor in preprocessors:
-        image = preprocessor.transform(image, None)
+        image = preprocessor.transform(np.array([image]), None)[0]
         image2d = image[:, :, 87]
 
         # Visualize the slice

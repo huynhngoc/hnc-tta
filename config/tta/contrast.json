@@ -1,0 +1,7 @@
+[{
+    "class_name": "ImageAugmentation3D",
+        "config": {
+            "contrast_range": 2.5,
+            "contrast_chance": 1.0
+            }
+}]
