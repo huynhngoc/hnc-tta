@@ -1,0 +1,7 @@
+[{
+    "class_name": "ImageAugmentation3D",
+        "config": {
+            "blur_range": 1.8,
+            "blur_chance": 1.0
+            }
+}]

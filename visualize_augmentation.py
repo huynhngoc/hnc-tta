@@ -53,7 +53,7 @@ for pp_config in config:
 
 #output_type = "image"
 center = "OUS"
-aug_type = "brightness"
+aug_type = "blur"
 
 print("Creating directories...")
 if not os.path.exists(base_path + f'/{center}_augmentation_visualization'):
