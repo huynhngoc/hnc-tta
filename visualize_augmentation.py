@@ -53,7 +53,7 @@ for pp_config in config:
 
 #output_type = "image"
 center = "OUS"
-aug_type = "brightness"
+aug_type = "noise"
 
 print("Creating directories...")
 if not os.path.exists(base_path + f'/{center}_augmentation_visualization'):
@@ -111,7 +111,7 @@ if center == "OUS":
         # Visualize the slice
         plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
         plt.imshow(apply_cmap_with_blend(image2d[..., 1],'inferno', vmin=0, vmax=1), origin='lower')
-        plt.title(f'PID: {pid}, Augmentation: {aug_type}: 1.8')
+        plt.title(f'PID: {pid}, Augmentation: {aug_type}: 0.08')
         plt.xlabel('X-axis')
         plt.ylabel('Y-axis')
 
@@ -120,6 +120,6 @@ if center == "OUS":
             os.makedirs(base_path + f'/OUS_augmentation_visualization/{aug_type}')
 
 
-        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid{pid}_CT_PET_1_8.pdf'
+        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid{pid}_CT_PET_0_8.pdf'
         plt.savefig(output_path, format='pdf')
         plt.close
