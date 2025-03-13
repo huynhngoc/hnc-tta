@@ -1,7 +1,7 @@
 [{
     "class_name": "ImageAugmentation3D",
         "config": {
-            "noise_variance": 0.08,
+            "noise_variance": 0.12,
             "noise_chance": 1.0
             }
 }]
