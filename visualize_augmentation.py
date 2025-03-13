@@ -53,7 +53,7 @@ for pp_config in config:
 
 #output_type = "image"
 center = "OUS"
-aug_type = "contrast"
+aug_type = "blur"
 
 print("Creating directories...")
 if not os.path.exists(base_path + f'/{center}_augmentation_visualization'):
@@ -120,6 +120,6 @@ if center == "OUS":
             os.makedirs(base_path + f'/OUS_augmentation_visualization/{aug_type}')
 
 
-        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid{pid}_CT_PET_2.pdf'
+        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid{pid}_CT_PET_1_8.pdf'
         plt.savefig(output_path, format='pdf')
         plt.close
