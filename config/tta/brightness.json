@@ -1,7 +1,7 @@
 [{
     "class_name": "ImageAugmentation3D",
         "config": {
-            "brightness_range": 1.8,
+            "brightness_range": 1.9,
             "brightness_chance": 1.0
             }
 }]
