@@ -111,7 +111,7 @@ if center == "OUS":
         # Visualize the slice
         plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
         plt.imshow(apply_cmap_with_blend(image2d[..., 1],'inferno', vmin=0, vmax=1), origin='lower')
-        plt.title(f'PID: {pid}, Augmentation: {aug_type}: 0.7')
+        plt.title(f'PID: {pid}, Augmentation: {aug_type}: 0.5')
         plt.xlabel('X-axis')
         plt.ylabel('Y-axis')
 
@@ -120,6 +120,6 @@ if center == "OUS":
             os.makedirs(base_path + f'/OUS_augmentation_visualization/{aug_type}')
 
 
-        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid{pid}_CT_PET_07.pdf'
+        output_path = f'{base_path}/OUS_augmentation_visualization/{aug_type}/pid{pid}_CT_PET_05.pdf'
         plt.savefig(output_path, format='pdf')
         plt.close
