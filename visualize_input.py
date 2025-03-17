@@ -81,7 +81,7 @@ if center == "OUS":
     image2d = image[:, :, 87]
     
     
-    plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
+    #plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
     plt.imshow(apply_cmap_with_blend(image2d[..., 1],
                                   'inferno', vmin=0, vmax=1), origin='lower')
 
@@ -92,6 +92,6 @@ if center == "OUS":
     plt.ylabel('Y-axis')
 
     # Save the figure as a PDF file
-    output_path = f'{base_path}/OUS_input_visualization/{output_type}/pid_{pid}_slice.pdf'
+    output_path = f'{base_path}/OUS_input_visualization/{output_type}/pid_{pid}_slice_PET.pdf'
     plt.savefig(output_path, format='pdf')
 
