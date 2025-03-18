@@ -34,7 +34,7 @@ base_path = source + '/analysis/' + args.name
 #num_tta = args.num_tta  
 pid = args.pid
 
-output_type = "prediction"
+output_type = "ground_truth"
 center = "OUS"
 
 if not os.path.exists(base_path + f'/{center}_input_visualization'):
@@ -80,8 +80,10 @@ if center == "OUS":
     
     image2d = image[:, :, 87]
     y_pred2d = y_pred[:, :, 87]
-    
-    plt.imshow((y_pred2d > 0.5).astype(float), cmap='gray', origin='lower')
+    y_true2d = y_true[:, :, 87]
+
+    plt.imshow((y_true2d > 0.5).astype(float), cmap='gray', origin='lower')
+    #plt.imshow((y_pred2d > 0.5).astype(float), cmap='gray', origin='lower')
     #plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
     #plt.imshow(apply_cmap_with_blend(image2d[..., 1],'inferno', vmin=0, vmax=1), origin='lower')
     #plt.imshow(image2d[..., 1],'inferno', vmin=0, vmax=1, origin='lower')
