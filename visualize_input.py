@@ -34,7 +34,7 @@ base_path = source + '/analysis/' + args.name
 #num_tta = args.num_tta  
 pid = args.pid
 
-output_type = "image"
+output_type = "prediction"
 center = "OUS"
 
 if not os.path.exists(base_path + f'/{center}_input_visualization'):
@@ -78,11 +78,11 @@ if center == "OUS":
         y_pred = f['predicted'][str(pid)][:]
         image = f['x'][str(pid)][:]
     
-    image2d = image[:, :, 107]
+    image2d = image[:, :, 87]
     
-    
-    plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
-    plt.imshow(apply_cmap_with_blend(image2d[..., 1],'inferno', vmin=0, vmax=1), origin='lower')
+    plt.imshow((y_pred > 0.5).astype(float), cmap='gray', origin='lower')
+    #plt.imshow(image2d[..., 0], 'gray', vmin=0, vmax=1, origin='lower')
+    #plt.imshow(apply_cmap_with_blend(image2d[..., 1],'inferno', vmin=0, vmax=1), origin='lower')
     #plt.imshow(image2d[..., 1],'inferno', vmin=0, vmax=1, origin='lower')
 
     # Visualize the slice
@@ -92,6 +92,6 @@ if center == "OUS":
     plt.ylabel('Y-axis')
 
     # Save the figure as a PDF file
-    output_path = f'{base_path}/OUS_input_visualization/{output_type}/pid_{pid}_slice_107.pdf'
+    output_path = f'{base_path}/OUS_input_visualization/{output_type}/pid_{pid}_slice_87.pdf'
     plt.savefig(output_path, format='pdf')
 
