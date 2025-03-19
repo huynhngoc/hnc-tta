@@ -18,4 +18,4 @@ model_file = source + '/segmentation/model.h5'
 
 model = load_model(model_file)
 
-print(model.model.summary())
+print(model.model.summary(line_length=200))
