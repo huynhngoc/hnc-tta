@@ -1,0 +1,22 @@
+[{
+    "class_name": "ImageAugmentation3D",
+        "config": {
+            "brightness_range": [
+                0.8,
+                1.2
+            ],
+            "brightness_chance": 0.6,
+            "contrast_range": [
+                0.8,
+                1.2
+            ],
+            "contrast_chance": 0.6,
+            "noise_variance": 0.05,
+            "noise_chance": 0.6,
+            "blur_range": [
+                0.8,
+                1.2
+            ],
+            "blur_chance": 0.6
+        }
+}]
