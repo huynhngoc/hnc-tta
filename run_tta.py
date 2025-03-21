@@ -24,9 +24,11 @@ if __name__ == '__main__':
     parser.add_argument("config")
     parser.add_argument("name")
     parser.add_argument("--iter", default=1, type=int)
+    parser.add_argument("source")
+
 
     args, unknown = parser.parse_known_args()
-    base_path = '../results/' + args.name
+    base_path = args.source + '/results/' + args.name
     with open(args.config, 'r') as file:
         config = json.load(file)
     iter = args.iter
@@ -42,11 +44,11 @@ if __name__ == '__main__':
         os.makedirs(base_path)
 
 
-    ous_h5 = '../segmentation/ous_test.h5'
-    ous_csv = '../segmentation/ous_test.csv'
-    maastro_h5 = '../segmentation/maastro_full.h5'
-    maastro_csv = '../segmentation/maastro_full.csv'
-    model_file = '../segmentation/model.h5'
+    ous_h5 = args.source + '/segmentation/ous_test.h5'
+    ous_csv = args.source + '/segmentation/ous_test.csv'
+    maastro_h5 = args.source + '/segmentation/maastro_full.h5'
+    maastro_csv = args.source + '/segmentation/maastro_full.csv'
+    model_file = args.source + '/segmentation/model.h5'
 
     model = load_model(model_file)
 
