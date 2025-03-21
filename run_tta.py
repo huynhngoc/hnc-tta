@@ -54,6 +54,7 @@ if __name__ == '__main__':
         os.makedirs(base_path + '/OUS')
 
     ous_df = pd.read_csv(ous_csv)
+    ous_df = ous_df[ous_df['patient_idx'] != 110]
 
     print('Working on OUS.....')
     for pid in ous_df.patient_idx:
