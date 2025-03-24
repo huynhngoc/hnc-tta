@@ -17,7 +17,7 @@ base_path = args.source + '/analysis/' + args.name
 print('Base_path:', base_path)
 print('Augmentation file:', args.name)
 
-n = [4,8,12,16,20,24,28,32]
+n = [4,8,12,16,20,24,28,32,36,40]
 
 ous_dsc = {}
 ous_sum_entropy = {}
@@ -27,13 +27,14 @@ for i in n:
     ous_df = pd.read_csv(base_path + f'/OUS_analysis/average_{i:02d}.csv')
     ous_dsc_mean = ous_df["f1_score"].mean()
     ous_dsc_std = ous_df["f1_score"].std()
-    ous_dsc[key] = (ous_dsc_mean, ous_dsc_std)
+    ous_dsc_median = ous_df["f1_score"].median()
+    ous_dsc[key] = (ous_dsc_mean, ous_dsc_std, ous_dsc_median)
     ous_sum_entropy[key] = ous_df["sum_entropy"].sum()
 
 # Convert dictionary to a DataFrame
 ous_tta_dsc_analysis = pd.DataFrame({
     "Number of TTA": ous_dsc.keys(),
-    "Mean DSC": ous_dsc.values()})
+    "Mean DSC (mean, std, median)": ous_dsc.values()})
 
 # Save as a CSV file
 ous_tta_dsc_analysis.to_csv(base_path + '/OUS_analysis/ous_tta_dsc_analysis.csv', index=False)
@@ -63,14 +64,15 @@ for i in n:
     maastro_df = pd.read_csv(base_path + f'/MAASTRO_analysis/average_{i:02d}.csv')
     maastro_dsc_mean = maastro_df["f1_score"].mean()
     maastro_dsc_std = maastro_df["f1_score"].std()
-    maastro_dsc[key] = (maastro_dsc_mean, maastro_dsc_std)
+    maastro_dsc_median = maastro_df["f1_score"].median()
+    maastro_dsc[key] = (maastro_dsc_mean, maastro_dsc_std, maastro_dsc_median)
     maastro_sum_entropy[key] = maastro_df["sum_entropy"].sum()
 
 
 # Convert dictionary to a DataFrame
 maastro_tta_dsc_analysis = pd.DataFrame({
     "Number of TTA": maastro_dsc.keys(),
-    "Mean DSC": maastro_dsc.values()})
+    "Mean DSC (mean, std, median)": maastro_dsc.values()})
 
 # Save as a CSV file
 maastro_tta_dsc_analysis.to_csv(base_path + '/MAASTRO_analysis/maastro_tta_dsc_analysis.csv', index=False)
