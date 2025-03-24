@@ -59,8 +59,8 @@ ous_sum_entropy_diff_analysis.to_csv(base_path + '/OUS_analysis/ous_sum_entropy_
 maastro_dsc = {}
 maastro_sum_entropy = {}
 for i in n:
-    key = f"{i:02d}"
-    maastro_df = pd.read_csv(base_path + f'/MAASTRO"_analysis/average_{i:02d}.csv')
+    key = i
+    maastro_df = pd.read_csv(base_path + f'/MAASTRO_analysis/average_{i:02d}.csv')
     maastro_dsc_mean = maastro_df["f1_score"].mean()
     maastro_dsc_std = maastro_df["f1_score"].std()
     maastro_dsc[key] = (maastro_dsc_mean, maastro_dsc_std)
