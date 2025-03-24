@@ -21,7 +21,7 @@ n = [4,8,12,16,20,24,28,32,36,40]
 
 ous_dsc = {}
 ous_sum_entropy = {}
-
+ous_mean_entropy = {}
 for i in n:
     key = i
     ous_df = pd.read_csv(base_path + f'/OUS_analysis/average_{i:02d}.csv')
@@ -30,6 +30,7 @@ for i in n:
     ous_dsc_median = ous_df["f1_score"].median()
     ous_dsc[key] = (ous_dsc_mean, ous_dsc_std, ous_dsc_median)
     ous_sum_entropy[key] = ous_df["sum_entropy"]
+    ous_mean_entropy[key] = ous_df["mean_entropy"]
 
 # Convert dictionary to a DataFrame
 ous_tta_dsc_analysis = pd.DataFrame({
@@ -54,11 +55,26 @@ ous_sum_entropy_diff_analysis = pd.DataFrame({
 
 ous_sum_entropy_diff_analysis.to_csv(base_path + '/OUS_analysis/ous_sum_entropy_mean_diff_analysis.csv', index=False)
 
+ous_mean_entropy_diff = {}
+keys = list(ous_dsc.keys())  
+for index in range(len(keys) - 1):  
+    i = keys[index]
+    j = keys[index + 1]  # Get the next key
+    key = f"{i}_{j}"
+    ous_mean_entropy_diff[key] = abs(ous_mean_entropy[i] - ous_mean_entropy[j]).mean()
+
+ous_mean_entropy_diff_analysis = pd.DataFrame({
+    "Transitions": ous_mean_entropy_diff.keys(),
+    "Mean Entropy Difference": ous_mean_entropy_diff.values()})
+
+ous_mean_entropy_diff_analysis.to_csv(base_path + '/OUS_analysis/ous_mean_entropy_diff_analysis.csv', index=False)
+
 
 
 
 maastro_dsc = {}
 maastro_sum_entropy = {}
+maastro_mean_entropy = {}
 for i in n:
     key = i
     maastro_df = pd.read_csv(base_path + f'/MAASTRO_analysis/average_{i:02d}.csv')
@@ -67,6 +83,8 @@ for i in n:
     maastro_dsc_median = maastro_df["f1_score"].median()
     maastro_dsc[key] = (maastro_dsc_mean, maastro_dsc_std, maastro_dsc_median)
     maastro_sum_entropy[key] = maastro_df["sum_entropy"]
+    maastro_mean_entropy[key] = maastro_df["mean_entropy"]
+
 
 
 # Convert dictionary to a DataFrame
@@ -91,3 +109,17 @@ maastro_sum_entropy_diff_analysis = pd.DataFrame({
     "Sum Entropy Difference": maastro_sum_entropy_diff.values()})
 
 maastro_sum_entropy_diff_analysis.to_csv(base_path + '/MAASTRO_analysis/maastro_sum_entropy_mean_diff_analysis.csv', index=False)
+
+maastro_mean_entropy_diff = {}
+keys = list(maastro_mean_entropy.keys())  
+for index in range(len(keys) - 1):  
+    i = keys[index]
+    j = keys[index + 1]  # Get the next key
+    key = f"{i}_{j}"
+    maastro_mean_entropy_diff[key] = abs(maastro_mean_entropy[i] - maastro_mean_entropy[j]).mean()
+
+maastro_mean_entropy_diff_analysis = pd.DataFrame({
+    "Transitions": maastro_mean_entropy_diff.keys(),
+    "Mean Entropy Difference": maastro_mean_entropy_diff.values()})
+
+maastro_mean_entropy_diff_analysis.to_csv(base_path + '/MAASTRO_analysis/maastro_mean_entropy_diff_analysis.csv', index=False)
