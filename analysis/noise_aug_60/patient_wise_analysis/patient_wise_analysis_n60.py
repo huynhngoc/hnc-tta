@@ -56,8 +56,8 @@ plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["f1_score"], subset["iou"], label=source)
     # Add labels to points
-    #for i, row in subset.iterrows():
-        #plt.annotate(row["pid"], (row["f1_score"], row["iou"]), textcoords="offset points", xytext=(5,5), ha="left")
+    for i, row in subset.iterrows():
+        plt.annotate(row["pid"], (row["f1_score"], row["iou"]), textcoords="offset points", xytext=(1,1), ha="left")
 
   
 # Labels and title
@@ -80,8 +80,8 @@ print('Working on average cross dice score vs original dice score visualization.
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["f1_score"], subset[f"mean_dice_{num_tta:02d}"], label=source)
-    #for i, row in subset.iterrows():
-        #plt.annotate(row["pid"], (row["f1_score"], row[f"mean_dice_{num_tta:02d}"]), textcoords="offset points", xytext=(5,5), ha="left")
+    for i, row in subset.iterrows():
+        plt.annotate(row["pid"], (row["f1_score"], row[f"mean_dice_{num_tta:02d}"]), textcoords="offset points", xytext=(1,1), ha="left")
 # Labels and title
 plt.xlabel("Original DSC")
 plt.ylabel(f"Mean Cross-DSC ({num_tta} TTA)")
@@ -98,12 +98,12 @@ plt.show()
 
 print('Working on sum entropy predicted region vs original dice score visualization.....')
 
-# Create scatter plot
+"""# Create scatter plot
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     plt.scatter(subset["f1_score"], subset["entropy_region"], label=source)#, alpha=0.7)
-    #for i, row in subset.iterrows():
-        #plt.annotate(row["pid"], (row["f1_score"], row["entropy_region"]), textcoords="offset points", xytext=(5,5), ha="left")
+    for i, row in subset.iterrows():
+        plt.annotate(row["pid"], (row["f1_score"], row["entropy_region"]), textcoords="offset points", xytext=(1,1), ha="left")
 # Labels and title
 plt.xlabel("Original DSC")
 plt.ylabel("Entropy of predicted class 1 region")
@@ -115,8 +115,39 @@ plt.grid(True, alpha=0.3)
 # Save the plot to a PDF file
 plt.savefig(f'entropy_region_vs_orgdice_{num_tta}.pdf', format='pdf', bbox_inches='tight')
 
-plt.show()
+plt.show()"""
 
+filtered_df = df[df['entropy_region']<20000]
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+for source, subset in df.groupby("source"):
+    axes[0].scatter(subset["f1_score"], subset["entropy_region"], label=source)
+    for i, row in subset.iterrows():
+        axes[0].annotate(row["pid"], (row["f1_score"], row["entropy_region"]), textcoords="offset points", xytext=(1,1), ha="left")
+
+axes[0].set_xlabel("Original DSC")
+axes[0].set_ylabel("Entropy of predicted class 1 region")
+#axes[0].set_yticks(axes[0].get_yticks())  # Ensure consistent ticks
+#axes[0].tick_params(axis="y", rotation=45)
+axes[0].legend()
+axes[0].grid(True, alpha=0.3)
+
+
+for source, subset in filtered_df.groupby("source"):
+    axes[1].scatter(subset["f1_score"], subset["entropy_region"], label=source)
+    for i, row in subset.iterrows():
+        axes[1].annotate(row["pid"], (row["f1_score"], row["entropy_region"]), textcoords="offset points", xytext=(1,1), ha="left")
+
+axes[1].set_xlabel("Original DSC")
+axes[1].set_ylabel("Entropy of predicted class 1 region < 20000")
+axes[1].legend()
+axes[1].grid(True, alpha=0.3)
+
+# Adjust layout and save figure
+plt.tight_layout()
+plt.savefig(f'entropy_region_subplots.pdf', format='pdf', bbox_inches='tight')
+
+plt.show()
 
 print('Working on volume vs original dice score visualization.....')
 
@@ -126,8 +157,8 @@ fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True)  # Share y-axis for
 # First subplot: Original DSC vs. Actual Volume
 for source, subset in df.groupby("source"):
     axes[0].scatter(subset["f1_score"], subset["actual_vol"], label=source)
-    #for i, row in subset.iterrows():
-        #axes[0].annotate(row["pid"], (row["f1_score"], row["actual_vol"]), textcoords="offset points", xytext=(5,5), ha="left")
+    for i, row in subset.iterrows():
+        axes[0].annotate(row["pid"], (row["f1_score"], row["actual_vol"]), textcoords="offset points", xytext=(1,1), ha="left")
 
 axes[0].set_xlabel("Original DSC")
 axes[0].set_ylabel("Number of GTV voxels")
@@ -139,8 +170,8 @@ axes[0].grid(True, alpha=0.3)
 # Second subplot: Mean Cross-DSC vs. Actual Volume
 for source, subset in df.groupby("source"):
     axes[1].scatter(subset[f"mean_dice_{num_tta:02d}"], subset["actual_vol"], label=source)
-    #for i, row in subset.iterrows():
-        #axes[1].annotate(row["pid"], (row[f"mean_dice_{num_tta:02d}"], row["actual_vol"]), textcoords="offset points", xytext=(5,5), ha="left")
+    for i, row in subset.iterrows():
+        axes[1].annotate(row["pid"], (row[f"mean_dice_{num_tta:02d}"], row["actual_vol"]), textcoords="offset points", xytext=(1,1), ha="left")
 
 axes[1].set_xlabel(f"Mean Cross-DSC ({num_tta} TTA)")
 axes[1].legend()
