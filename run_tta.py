@@ -7,6 +7,7 @@ import h5py
 import pandas as pd
 from deoxys.data.preprocessor import preprocessor_from_config
 import json
+from datetime import datetime
 
 
 def augment_image(image, preprocessors):
@@ -19,6 +20,8 @@ if __name__ == '__main__':
     gpus = tf.config.list_physical_devices('GPU')
     if not gpus:
         raise RuntimeError("GPU Unavailable")
+
+    startTime = datetime.now()
 
     parser = argparse.ArgumentParser()
     parser.add_argument("config")
@@ -85,3 +88,5 @@ if __name__ == '__main__':
 
         with open(base_path + '/MAASTRO/' + str(pid) + f'/{iter:02d}.npy', 'wb') as f:
             np.save(f, preds[0])
+
+    print(f"Time taken: {datetime.now() - startTime}")
