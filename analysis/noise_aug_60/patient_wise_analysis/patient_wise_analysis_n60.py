@@ -9,7 +9,7 @@ ous_org = pd.read_csv("OUS_original_results.csv")
 ous_org = ous_org[["pid","f1_score"]]
 
 ous_summarize = pd.read_csv(f"OUS_average_{num_tta:02d}.csv")
-ous_summarize = ous_summarize[["pid","entropy_region", "actual_vol"]]
+ous_summarize = ous_summarize[["pid","entropy_region", "actual_vol", "predicted_vol"]]
 
 ous_df = pd.merge(ous_org, ous_summarize, on='pid', how='outer')
 
@@ -27,7 +27,7 @@ maastro_org = pd.read_csv("MAASTRO_original_results.csv")
 maastro_org = maastro_org[["pid","f1_score"]]
 
 maastro_summarize = pd.read_csv(f"MAASTRO_average_{num_tta:02d}.csv")
-maastro_summarize = maastro_summarize[["pid","entropy_region", "actual_vol"]]
+maastro_summarize = maastro_summarize[["pid","entropy_region", "actual_vol", "predicted_vol"]]
 
 maastro_df = pd.merge(maastro_org, maastro_summarize, on='pid', how='outer')
 
@@ -49,6 +49,7 @@ ous_df["source"] = "OUS"  # Add identifier column
 maastro_df["source"] = "MAASTRO"  # Add identifier column
 df = pd.concat([ous_df, maastro_df])  # Merge datasets
 
+df['entropy_region_norm'] = df['entropy_region'] / df['predicted_vol']
 
 print('Working on IoU vs original dice score visualization.....')
 # Create scatter plot
@@ -149,6 +150,26 @@ plt.savefig(f'entropy_region_subplots.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
+
+# Create scatter plot
+plt.figure(figsize=(6, 4))
+for source, subset in df.groupby("source"):
+    plt.scatter(subset["f1_score"], subset["entropy_region_norm"], label=source)#, alpha=0.7)
+    for i, row in subset.iterrows():
+        plt.annotate(row["pid"], (row["f1_score"], row["entropy_region_norm"]), textcoords="offset points", xytext=(1,1), ha="left")
+# Labels and title
+plt.xlabel("Original DSC")
+plt.ylabel("Entropy")
+plt.yticks(rotation=45)
+plt.title("Sum of entropy of predicted class 1 region normalized \n by predicted class 1 volume as a function of Original DSC")
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Save the plot to a PDF file
+plt.savefig(f'entropy_region_normalized_{num_tta}.pdf', format='pdf', bbox_inches='tight')
+
+plt.show()
+exit()
 print('Working on volume vs original dice score visualization.....')
 
 # Create a figure with two subplots
