@@ -182,7 +182,7 @@ for source, subset in df.groupby("source"):
         axes[0].annotate(row["pid"], (row["f1_score"], row["actual_vol"]), textcoords="offset points", xytext=(1,1), ha="left")
 
 axes[0].set_xlabel("Original DSC")
-axes[0].set_ylabel("Number of GTV voxels")
+axes[0].set_ylabel("Number of GTV voxels in ground truth segmentation")
 axes[0].set_yticks(axes[0].get_yticks())  # Ensure consistent ticks
 axes[0].tick_params(axis="y", rotation=45)
 axes[0].legend()
