@@ -18,9 +18,10 @@ with h5py.File(ous_filename, 'r') as f:
 with h5py.File(maastro_filename, 'r') as f:
     maastro_pids = list(f['y'].keys())
 
-
 data = []
 for pid in ous_pids:
+    if pid == '110':
+        continue
     gc.collect()
     print(pid)
     with h5py.File(ous_filename, 'r') as f:
@@ -86,6 +87,8 @@ df.to_csv('../entropy/mc_entropy_15_sample_area_new.csv', index=False)
 tta_base_path = '../analysis/intensity_aug_60/'
 data = []
 for pid in ous_pids:
+    if pid == '110':
+        continue
     gc.collect()
     print(pid)
     with h5py.File(ous_filename, 'r') as f:
