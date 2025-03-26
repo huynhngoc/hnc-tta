@@ -17,7 +17,7 @@ base_path = args.source + '/analysis/' + args.name
 print('Base_path:', base_path)
 print('Augmentation file:', args.name)
 
-n = [4,8,12,16,20,24,28,32,36,40]
+n = [2,4,8,12,16,20,24,28,32,36,40]
 
 ous_dsc = {}
 ous_sum_entropy = {}
