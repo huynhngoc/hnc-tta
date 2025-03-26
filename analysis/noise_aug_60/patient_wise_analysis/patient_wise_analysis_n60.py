@@ -11,7 +11,7 @@ ous_org = pd.read_csv("OUS_original_results.csv")
 ous_org = ous_org[["pid","f1_score"]]
 
 ous_summarize = pd.read_csv(f"OUS_average_{num_tta:02d}.csv")
-ous_summarize = ous_summarize[["pid","entropy_region", "actual_vol", "predicted_vol"]]
+ous_summarize = ous_summarize[["pid","entropy_org_pred_region", "actual_vol", "org_predicted_vol"]]
 
 ous_df = pd.merge(ous_org, ous_summarize, on='pid', how='outer')
 
@@ -29,7 +29,7 @@ maastro_org = pd.read_csv("MAASTRO_original_results.csv")
 maastro_org = maastro_org[["pid","f1_score"]]
 
 maastro_summarize = pd.read_csv(f"MAASTRO_average_{num_tta:02d}.csv")
-maastro_summarize = maastro_summarize[["pid","entropy_region", "actual_vol", "predicted_vol"]]
+maastro_summarize = maastro_summarize[["pid","entropy_org_pred_region", "actual_vol", "org_predicted_vol"]]
 
 maastro_df = pd.merge(maastro_org, maastro_summarize, on='pid', how='outer')
 
@@ -52,7 +52,7 @@ df = pd.concat([ous_df, maastro_df])  # Merge datasets
 spearman_corr_dict = {}
 p_value_dict = {}
 
-df['entropy_region_norm'] = df['entropy_region'] / df['predicted_vol']
+df['entropy_region_norm'] = df['entropy_org_pred_region'] / df['org_predicted_vol']
 
 print('Working on IoU vs original dice score visualization.....')
 # Create scatter plot
