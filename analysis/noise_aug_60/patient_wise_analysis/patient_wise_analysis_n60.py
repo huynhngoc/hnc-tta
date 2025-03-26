@@ -131,7 +131,7 @@ plt.savefig(f'entropy_region_vs_orgdice_{num_tta}.pdf', format='pdf', bbox_inche
 
 plt.show()"""
 
-filtered_df = df[df['entropy_region']<20000]
+"""filtered_df = df[df['entropy_region']<20000]
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 for source, subset in df.groupby("source"):
@@ -161,7 +161,7 @@ axes[1].grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(f'entropy_region_subplots.pdf', format='pdf', bbox_inches='tight')
 
-plt.show()
+plt.show()"""
 
 
 # Create scatter plot
