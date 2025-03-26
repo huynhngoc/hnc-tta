@@ -54,11 +54,13 @@ p_value_dict = {}
 
 df['entropy_region_norm'] = df['entropy_org_pred_region'] / df['org_predicted_vol']
 
+colors = {"OUS": "#d95f02", "MAASTRO": "#7570b3"}
+
 print('Working on IoU vs original dice score visualization.....')
 # Create scatter plot
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
-    plt.scatter(subset["f1_score"], subset["iou"], label=source)
+    plt.scatter(subset["f1_score"], subset["iou"], label=source, color=colors[source])
     # Calculate Spearman's correlation coefficient
     correlation, p_value = spearmanr(subset["f1_score"], subset["iou"])
     # Store values in dictionaries
@@ -76,6 +78,8 @@ plt.ylabel('$IoU_{TTA}$')
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.ylim(0.0, 1.0)
+plt.xlim(0.0, 1.0)
+
 
 
 # Save the plot to a PDF file
@@ -88,7 +92,7 @@ print('Working on average cross dice score vs original dice score visualization.
 # Create scatter plot
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
-    plt.scatter(subset["f1_score"], subset[f"mean_dice_{num_tta:02d}"], label=source)
+    plt.scatter(subset["f1_score"], subset[f"mean_dice_{num_tta:02d}"], label=source, color=colors[source])
     # Calculate Spearman's correlation coefficient
     correlation, p_value = spearmanr(subset["f1_score"], subset[f"mean_dice_{num_tta:02d}"])
     # Store values in dictionaries
@@ -103,6 +107,7 @@ plt.ylabel(f"Mean Cross-DSC ({num_tta} TTA)")
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.ylim(0.0, 1.0)
+plt.xlim(0.0, 1.0)
 
 
 # Save the plot to a PDF file
@@ -167,7 +172,7 @@ plt.show()"""
 # Create scatter plot
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
-    plt.scatter(subset["f1_score"], subset["entropy_region_norm"], label=source)#, alpha=0.7)
+    plt.scatter(subset["f1_score"], subset["entropy_region_norm"], label=source, color=colors[source])#, alpha=0.7)
     # Calculate Spearman's correlation coefficient
     correlation, p_value = spearmanr(subset["f1_score"], subset["entropy_region_norm"])
     # Store values in dictionaries
@@ -182,12 +187,14 @@ plt.yticks(rotation=45)
 plt.title("Sum of entropy of predicted class 1 region normalized \n by predicted class 1 volume as a function of Original DSC")
 plt.legend()
 plt.grid(True, alpha=0.3)
+plt.xlim(0.0, 1.0)
+
 
 # Save the plot to a PDF file
 plt.savefig(f'entropy_region_normalized_{num_tta}.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
-exit()
+
 print('Working on volume vs original dice score visualization.....')
 
 # Create a figure with two subplots
@@ -195,7 +202,7 @@ fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True)  # Share y-axis for
 
 # First subplot: Original DSC vs. Actual Volume
 for source, subset in df.groupby("source"):
-    axes[0].scatter(subset["f1_score"], subset["actual_vol"], label=source)
+    axes[0].scatter(subset["f1_score"], subset["actual_vol"], label=source, color=colors[source])
     # Calculate Spearman's correlation coefficient
     correlation, p_value = spearmanr(subset["f1_score"], subset["actual_vol"])
     # Store values in dictionaries
@@ -210,10 +217,12 @@ axes[0].set_yticks(axes[0].get_yticks())  # Ensure consistent ticks
 axes[0].tick_params(axis="y", rotation=45)
 axes[0].legend()
 axes[0].grid(True, alpha=0.3)
+axes[0].set_xlim(0.0, 1.0)
+
 
 # Second subplot: Mean Cross-DSC vs. Actual Volume
 for source, subset in df.groupby("source"):
-    axes[1].scatter(subset[f"mean_dice_{num_tta:02d}"], subset["actual_vol"], label=source)
+    axes[1].scatter(subset[f"mean_dice_{num_tta:02d}"], subset["actual_vol"], label=source, color=colors[source])
     # Calculate Spearman's correlation coefficient
     correlation, p_value = spearmanr(subset[f"mean_dice_{num_tta:02d}"], subset["actual_vol"])
     # Store values in dictionaries
@@ -225,6 +234,9 @@ for source, subset in df.groupby("source"):
 axes[1].set_xlabel(f"Mean Cross-DSC ({num_tta} TTA)")
 axes[1].legend()
 axes[1].grid(True, alpha=0.3)
+axes[1].set_xlim(0.0, 1.0)
+
+
 
 # Adjust layout and save figure
 plt.tight_layout()
