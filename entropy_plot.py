@@ -150,11 +150,12 @@ df.to_csv('../entropy/tta_entropy_15_sample_area_intensity_aug_60.csv', index=Fa
 
 mc_df = pd.read_csv('../entropy/mc_entropy_15_sample_area_new.csv')
 
+colors = {"OUS": "#d95f02", "MAASTRO": "#7570b3"}
 
-sns.boxplot(data=mc_df, x='area', y='entropy', order=['TP', 'FP', 'FN'], showmeans=True, hue='center', hue_order=['OUS', 'MAASTRO'],
+sns.boxplot(data=mc_df, x='area', y='entropy', order=['TP', 'FP', 'FN'], showmeans=True, hue='center', hue_order=['OUS', 'MAASTRO'], palette=colors,
             meanprops={'marker': 'o', 'markeredgecolor': 'black',
-                       'markerfacecolor': 'firebrick'},
-            flierprops={'marker': 'o', 'markeredgecolor': 'white', 'markeredgewidth': '0.5'}, )
+                       'markerfacecolor': '#1b9e77'})
+            #flierprops={'marker': 'o', 'markeredgecolor': 'white', 'markeredgewidth': '0.5'}, )
 plt.xlabel('')
 ax = plt.gca()
 ax.set_xticklabels(['True Positives', 'False Positives', 'False Negatives'])
@@ -169,10 +170,10 @@ plt.close('all')
 
 tta_df = pd.read_csv('../entropy/tta_entropy_15_sample_area_intensity_aug_60.csv')
 
-sns.boxplot(data=tta_df, x='area', y='entropy', order=['TP', 'FP', 'FN'], showmeans=True, hue='center', hue_order=['OUS', 'MAASTRO'],
+sns.boxplot(data=tta_df, x='area', y='entropy', order=['TP', 'FP', 'FN'], showmeans=True, hue='center', hue_order=['OUS', 'MAASTRO'], palette=colors,
             meanprops={'marker': 'o', 'markeredgecolor': 'black',
-                       'markerfacecolor': 'firebrick'},
-            flierprops={'marker': 'o', 'markeredgecolor': 'white', 'markeredgewidth': '0.5'}, )
+                       'markerfacecolor': '#1b9e77'})
+            #flierprops={'marker': 'o', 'markeredgecolor': 'white', 'markeredgewidth': '0.5'}, )
 plt.xlabel('')
 ax = plt.gca()
 ax.set_xticklabels(['True Positives', 'False Positives', 'False Negatives'])
