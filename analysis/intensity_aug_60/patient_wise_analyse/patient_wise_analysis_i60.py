@@ -5,7 +5,7 @@ import seaborn as sns
 from scipy.stats import spearmanr
 
 
-num_tta = 12
+num_tta = 15
 
 ous_org = pd.read_csv("OUS_original_results.csv")
 ous_org = ous_org[["pid","f1_score"]]
