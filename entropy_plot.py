@@ -80,10 +80,10 @@ for pid in maastro_pids:
 
 
 df = pd.DataFrame(data)
-df.to_csv('../entropy/mc_entropy_15_sample_area.csv', index=False)
+df.to_csv('../entropy/mc_entropy_15_sample_area_new.csv', index=False)
 
 # getting tta results
-tta_base_path = '../analysis/noise_aug/'
+tta_base_path = '../analysis/intensity_aug_60/'
 data = []
 for pid in ous_pids:
     gc.collect()
@@ -145,10 +145,10 @@ for pid in maastro_pids:
 
 
 df = pd.DataFrame(data)
-df.to_csv('../entropy/tta_entropy_15_sample_area.csv', index=False)
+df.to_csv('../entropy/tta_entropy_15_sample_area_intensity_aug_60.csv', index=False)
 
 
-mc_df = pd.read_csv('../entropy/mc_entropy_15_sample_area.csv')
+mc_df = pd.read_csv('../entropy/mc_entropy_15_sample_area_new.csv')
 
 
 sns.boxplot(data=mc_df, x='area', y='entropy', order=['TP', 'FP', 'FN'], showmeans=True, hue='center', hue_order=['OUS', 'MAASTRO'],
@@ -162,12 +162,12 @@ plt.ylabel('Entropy')
 plt.legend(bbox_to_anchor=(0.5, -0.15),
            loc='lower center', borderaxespad=0, ncol=2)
 plt.subplots_adjust(bottom=0.15)
-plt.savefig('../entropy/mc_entropy_15_sample_area.png')
+plt.savefig('../entropy/mc_entropy_15_sample_area_new.png')
 plt.close('all')
 
 
 
-tta_df = pd.read_csv('../entropy/tta_entropy_15_sample_area.csv')
+tta_df = pd.read_csv('../entropy/tta_entropy_15_sample_area_intensity_aug_60.csv')
 
 sns.boxplot(data=tta_df, x='area', y='entropy', order=['TP', 'FP', 'FN'], showmeans=True, hue='center', hue_order=['OUS', 'MAASTRO'],
             meanprops={'marker': 'o', 'markeredgecolor': 'black',
@@ -180,7 +180,7 @@ plt.ylabel('Entropy')
 plt.legend(bbox_to_anchor=(0.5, -0.15),
            loc='lower center', borderaxespad=0, ncol=2)
 plt.subplots_adjust(bottom=0.15)
-plt.savefig('../entropy/tta_entropy_15_sample_area.png')
+plt.savefig('../entropy/tta_entropy_15_sample_area_intensity_aug_60.png')
 plt.close('all')
 
 
