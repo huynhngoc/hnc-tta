@@ -4,6 +4,7 @@ import argparse
 import os
 import h5py
 import pandas as pd
+from datetime import datetime
 
 
 def f1_score(y_true, y_pred, beta=1):
@@ -61,7 +62,7 @@ def specificity(y_true, y_pred):
 
 
 if __name__ == '__main__':
-
+    startTime = datetime.now()
     parser = argparse.ArgumentParser()
     parser.add_argument("name")
     parser.add_argument("--num_tta", default=1, type=int)
@@ -250,3 +251,5 @@ if __name__ == '__main__':
     pd.DataFrame(dice_info).to_csv(
         base_path + f'/MAASTRO_analysis/dice_{num_tta:02d}.csv', index=False
     )
+
+    print(f"Time taken: {datetime.now() - startTime}")
