@@ -110,6 +110,7 @@ if __name__ == '__main__':
         y_pred = []
         for i in range(1, iter+1):
             with open(args.source + f'/results/{args.name}/OUS/' + str(pid) + f'/{iter:02d}.npy', 'rb') as f:
+                print(f"Appending prob.map from file: {args.source}/results/{args.name}/OUS/{str(pid)}/{iter:02d}.npy")
                 y_pred.append(np.load(f))
         y_pred = np.stack(y_pred, axis=0).mean(axis=0)
         uncertainty_map = - y_pred * np.log(y_pred)
