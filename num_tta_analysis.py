@@ -22,7 +22,7 @@ n = [4,8,12,16,20,24,28,32,36,40]
 ous_dsc = {}
 ous_sum_entropy = {}
 ous_mean_entropy = {}
-for i in range(1,41):
+for i in n:
     key = i
     ous_df = pd.read_csv(base_path + f'/OUS_analysis/average_{i:02d}.csv')
     ous_dsc_mean = ous_df["f1_score"].mean()
@@ -75,7 +75,7 @@ ous_mean_entropy_diff_analysis.to_csv(base_path + '/OUS_analysis/ous_mean_entrop
 maastro_dsc = {}
 maastro_sum_entropy = {}
 maastro_mean_entropy = {}
-for i in range(1,41):
+for i in n:
     key = i
     maastro_df = pd.read_csv(base_path + f'/MAASTRO_analysis/average_{i:02d}.csv')
     maastro_dsc_mean = maastro_df["f1_score"].mean()
