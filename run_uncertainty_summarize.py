@@ -106,7 +106,7 @@ if __name__ == '__main__':
 
         with h5py.File(ous_h5, 'r') as f:
             y_true = f['y'][str(pid)][:]
-
+            y_org_pred = f['predicted'][str(pid)][:]
         y_pred = []
         for i in range(1, iter+1):
             with open(args.source + f'/results/{args.name}/OUS/' + str(pid) + f'/{i:02d}.npy', 'rb') as f:
@@ -126,6 +126,7 @@ if __name__ == '__main__':
             'recall': recall(y_true, y_pred),
             'specificity': specificity(y_true, y_pred),
             'predicted_vol': (y_pred > 0.5).astype(float).sum(),
+            'org_predicted_vol': (y_org_pred > 0.5).astype(float).sum(),
             'actual_vol': y_true.sum(),
             'TP_vol': (true_positive > 0).astype(float).sum(),
             'TN_vol': (true_negative > 0).astype(float).sum(),
@@ -134,6 +135,7 @@ if __name__ == '__main__':
             'sum_entropy': uncertainty_map.sum(),
             'mean_entropy': uncertainty_map.mean(),
             'entropy_region': (uncertainty_map[y_pred > 0.5]).sum(),
+            'entropy_org_pred_region': (uncertainty_map[y_org_pred > 0.5]).sum(),
             'entropy_TP': (uncertainty_map[true_positive > 0]).sum(),
             'entropy_TN': (uncertainty_map[true_negative > 0]).sum(),
             'entropy_FP': (uncertainty_map[false_positive > 0]).sum(),
@@ -147,7 +149,7 @@ if __name__ == '__main__':
 
 
     pd.DataFrame(data).to_csv(
-        base_path + f'/OUS_analysis/average_{iter:02d}.csv', index=False
+        base_path + f'/OUS_analysis/average_{iter:02d}_new.csv', index=False
     )
 
     if not os.path.exists(base_path + '/MAASTRO_analysis'):
@@ -161,6 +163,7 @@ if __name__ == '__main__':
     
         with h5py.File(maastro_h5, 'r') as f:
             y_true = f['y'][str(pid)][:]
+            y_org_pred = f['predicted'][str(pid)][:]
 
         y_pred = []
         for i in range(1, iter+1):
@@ -181,6 +184,7 @@ if __name__ == '__main__':
             'recall': recall(y_true, y_pred),
             'specificity': specificity(y_true, y_pred),
             'predicted_vol': (y_pred > 0.5).astype(float).sum(),
+            'org_predicted_vol': (y_org_pred > 0.5).astype(float).sum(),
             'actual_vol': y_true.sum(),
             'TP_vol': (true_positive > 0).astype(float).sum(),
             'TN_vol': (true_negative > 0).astype(float).sum(),
@@ -189,6 +193,7 @@ if __name__ == '__main__':
             'sum_entropy': uncertainty_map.sum(),
             'mean_entropy': uncertainty_map.mean(),
             'entropy_region': (uncertainty_map[y_pred > 0.5]).sum(),
+            'entropy_org_pred_region': (uncertainty_map[y_org_pred > 0.5]).sum(),
             'entropy_TP': (uncertainty_map[true_positive > 0]).sum(),
             'entropy_TN': (uncertainty_map[true_negative > 0]).sum(),
             'entropy_FP': (uncertainty_map[false_positive > 0]).sum(),
@@ -201,7 +206,7 @@ if __name__ == '__main__':
 
 
     pd.DataFrame(data).to_csv(
-        base_path + f'/MAASTRO_analysis/average_{iter:02d}.csv', index=False
+        base_path + f'/MAASTRO_analysis/average_{iter:02d}_new.csv', index=False
     )
 
     print(f"Time taken: {datetime.now() - startTime}")
