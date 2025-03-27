@@ -153,6 +153,39 @@ df.to_csv('../entropy/tta_entropy_15_sample_area_intensity_aug_60.csv', index=Fa
 
 mc_df = pd.read_csv('../entropy/mc_entropy_15_sample_area_new.csv')
 
+mc_dict_mean = {}
+mc_dict_median = {}
+mc_dict_Q25 = {}
+mc_dict_Q75 = {}
+
+mc_dict_mean["TP"] = mc_df[mc_df.area == 'TP']['entropy'].mean()
+mc_dict_median["TP"] = mc_df[mc_df.area == 'TP']['entropy'].median()
+mc_dict_Q25["TP"] = mc_df[mc_df.area == 'TP']['entropy'].quantile(0.25)
+mc_dict_Q75["TP"] = mc_df[mc_df.area == 'TP']['entropy'].quantile(0.75)
+
+
+mc_dict_mean["FP"] = mc_df[mc_df.area == 'FP']['entropy'].mean()
+mc_dict_median["FP"] = mc_df[mc_df.area == 'FP']['entropy'].median()
+mc_dict_Q25["FP"] = mc_df[mc_df.area == 'FP']['entropy'].quantile(0.25)
+mc_dict_Q75["FP"] = mc_df[mc_df.area == 'FP']['entropy'].quantile(0.75)
+
+mc_dict_mean["FN"] = mc_df[mc_df.area == 'FN']['entropy'].mean()
+mc_dict_median["FN"] = mc_df[mc_df.area == 'FN']['entropy'].median()
+mc_dict_Q25["FN"] = mc_df[mc_df.area == 'FN']['entropy'].quantile(0.25)
+mc_dict_Q75["FN"] = mc_df[mc_df.area == 'FN']['entropy'].quantile(0.75)
+
+# Convert dictionary to a DataFrame
+results = pd.DataFrame({
+    "Area": mc_dict_mean.keys(),
+    "Mean": mc_dict_mean.values(),
+    "Median": mc_dict_median.values(),
+    "Q25": mc_dict_Q25.values(),
+    "Q75": mc_dict_Q75.values()
+})
+
+# Save as a CSV file
+results.to_csv(f"mc_stats_entropy_values.csv", index=False)
+
 colors = {"OUS": "#d95f02", "MAASTRO": "#7570b3"}
 
 sns.boxplot(data=mc_df, x='area', y='entropy', order=['TP', 'FP', 'FN'], showmeans=True, hue='center', hue_order=['OUS', 'MAASTRO'], palette=colors,
@@ -172,6 +205,39 @@ plt.close('all')
 
 
 tta_df = pd.read_csv('../entropy/tta_entropy_15_sample_area_intensity_aug_60.csv')
+
+tta_dict_mean = {}
+tta_dict_median = {}
+tta_dict_Q25 = {}
+tta_dict_Q75 = {}
+
+tta_dict_mean["TP"] = tta_df[tta_df.area == 'TP']['entropy'].mean()
+tta_dict_median["TP"] = tta_df[tta_df.area == 'TP']['entropy'].median()
+tta_dict_Q25["TP"] = tta_df[tta_df.area == 'TP']['entropy'].quantile(0.25)
+tta_dict_Q75["TP"] = tta_df[tta_df.area == 'TP']['entropy'].quantile(0.75)
+
+
+tta_dict_mean["FP"] = tta_df[tta_df.area == 'FP']['entropy'].mean()
+tta_dict_median["FP"] = tta_df[tta_df.area == 'FP']['entropy'].median()
+tta_dict_Q25["FP"] = tta_df[tta_df.area == 'FP']['entropy'].quantile(0.25)
+tta_dict_Q75["FP"] = tta_df[tta_df.area == 'FP']['entropy'].quantile(0.75)
+
+tta_dict_mean["FN"] = tta_df[tta_df.area == 'FN']['entropy'].mean()
+tta_dict_median["FN"] = tta_df[tta_df.area == 'FN']['entropy'].median()
+tta_dict_Q25["FN"] = tta_df[tta_df.area == 'FN']['entropy'].quantile(0.25)
+tta_dict_Q75["FN"] = tta_df[tta_df.area == 'FN']['entropy'].quantile(0.75)
+
+# Convert dictionary to a DataFrame
+results = pd.DataFrame({
+    "Area": tta_dict_mean.keys(),
+    "Mean": tta_dict_mean.values(),
+    "Median": tta_dict_median.values(),
+    "Q25": tta_dict_Q25.values(),
+    "Q75": tta_dict_Q75.values()
+})
+
+# Save as a CSV file
+results.to_csv(f"tta_stats_entropy_values.csv", index=False)
 
 sns.boxplot(data=tta_df, x='area', y='entropy', order=['TP', 'FP', 'FN'], showmeans=True, hue='center', hue_order=['OUS', 'MAASTRO'], palette=colors,
             meanprops={'marker': 'o', 'markeredgecolor': 'black',
