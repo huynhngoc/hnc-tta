@@ -184,7 +184,7 @@ results = pd.DataFrame({
 })
 
 # Save as a CSV file
-results.to_csv(f"mc_stats_entropy_values.csv", index=False)
+results.to_csv(f"'../entropy/mc_stats_entropy_values.csv", index=False)
 
 colors = {"OUS": "#d95f02", "MAASTRO": "#7570b3"}
 
@@ -237,7 +237,7 @@ results = pd.DataFrame({
 })
 
 # Save as a CSV file
-results.to_csv(f"tta_stats_entropy_values.csv", index=False)
+results.to_csv(f"'../entropy/tta_stats_entropy_values.csv", index=False)
 
 sns.boxplot(data=tta_df, x='area', y='entropy', order=['TP', 'FP', 'FN'], showmeans=True, hue='center', hue_order=['OUS', 'MAASTRO'], palette=colors,
             meanprops={'marker': 'o', 'markeredgecolor': 'black',
