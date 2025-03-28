@@ -56,6 +56,8 @@ df = df.dropna(subset=["entropy_region_norm"])
 
 colors = {"OUS": "#d95f02", "MAASTRO": "#7570b3"}
 
+maastro_pids_to_annotate = [69, 23]
+ous_pids_to_annotate = [ 217, 82, 52]
 
 """print(df.head())
 print(df.tail())
@@ -71,7 +73,7 @@ print('Working on IoU vs original dice score visualization.....')
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     print(source)
-    plt.scatter(subset["f1_score"], subset["iou"], label=source, color=colors[source])
+    plt.scatter(subset["f1_score"], subset["iou"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')#, alpha=0.7)
     # Calculate Spearman's correlation coefficient
     correlation, p_value = spearmanr(subset["f1_score"], subset["iou"])
     print(f"{source} original_dice_vs_iou: {correlation}, p-value: {p_value}")
@@ -80,7 +82,10 @@ for source, subset in df.groupby("source"):
     p_value_dict[f"{source} original_dice_vs_iou"] = p_value
     # Add labels to points
     for i, row in subset.iterrows():
-        plt.annotate(row["pid"], (row["f1_score"], row["iou"]), textcoords="offset points", xytext=(1,1), ha="left")
+        if row["pid"] in maastro_pids_to_annotate and source == "MAASTRO":
+            plt.annotate(row["pid"], (row["f1_score"], row["iou"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+        if row["pid"] in ous_pids_to_annotate and source == "OUS":
+            plt.annotate(row["pid"], (row["f1_score"], row["iou"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
 
   
 # Labels and title
@@ -105,14 +110,18 @@ print('Working on average cross dice score vs original dice score visualization.
 plt.figure(figsize=(6, 4))
 for source, subset in df.groupby("source"):
     print(source)
-    plt.scatter(subset["f1_score"], subset[f"mean_dice_{num_tta:02d}"], label=source, color=colors[source])
+    plt.scatter(subset["f1_score"], subset[f"mean_dice_{num_tta:02d}"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')
     # Calculate Spearman's correlation coefficient
     correlation, p_value = spearmanr(subset["f1_score"], subset[f"mean_dice_{num_tta:02d}"])
     # Store values in dictionaries
     spearman_corr_dict[f"{source} original_dice_vs_mean_cross_dice_{num_tta}"] = correlation
     p_value_dict[f"{source} original_dice_vs_mean_cross_dice_{num_tta}"] = p_value
     for i, row in subset.iterrows():
-        plt.annotate(row["pid"], (row["f1_score"], row[f"mean_dice_{num_tta:02d}"]), textcoords="offset points", xytext=(1,1), ha="left")
+        if row["pid"] in maastro_pids_to_annotate and source == "MAASTRO":
+            plt.annotate(row["pid"], (row["f1_score"], row[f"mean_dice_{num_tta:02d}"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+        if row["pid"] in ous_pids_to_annotate and source == "OUS":
+            plt.annotate(row["pid"], (row["f1_score"], row[f"mean_dice_{num_tta:02d}"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+
 # Labels and title
 plt.xlabel("Original DSC")
 plt.ylabel(f"Mean Cross-DSC ({num_tta} TTA)")
@@ -129,6 +138,110 @@ plt.savefig(f'crossdice_vs_orgdice_{num_tta}.pdf', format='pdf', bbox_inches='ti
 plt.show()
 
 print('Working on sum entropy predicted region vs original dice score visualization.....')
+
+
+# Create scatter plot
+plt.figure(figsize=(6, 4))
+for source, subset in df.groupby("source"):
+    print(source)
+    plt.scatter(subset["f1_score"], subset["entropy_region_norm"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')#, alpha=0.7)
+    # Calculate Spearman's correlation coefficient
+    correlation, p_value = spearmanr(subset["f1_score"], subset["entropy_region_norm"])
+    print(f"{source} original_dice_vs_iou: {correlation}, p-value: {p_value}")
+
+    # Store values in dictionaries
+    spearman_corr_dict[f"{source} original_dice_vs_entropy_region_norm"] = correlation
+    p_value_dict[f"{source} original_dice_vs_entropy_region_norm"] = p_value
+    for i, row in subset.iterrows():
+        if row["pid"] in maastro_pids_to_annotate and source == "MAASTRO":
+            plt.annotate(row["pid"], (row["f1_score"], row["entropy_region_norm"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+        if row["pid"] in ous_pids_to_annotate and source == "OUS":
+            plt.annotate(row["pid"], (row["f1_score"], row["entropy_region_norm"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+# Labels and title
+plt.xlabel("Original DSC")
+plt.ylabel("Entropy")
+plt.yticks(rotation=45)
+plt.title("Average entropy level inside the predicted GTV region \n as a function of Original DSC")
+#plt.title("Sum of entropy of predicted class 1 region normalized \n by predicted class 1 volume as a function of Original DSC")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.xlim(0.0, 1.0)
+
+
+# Save the plot to a PDF file
+plt.savefig(f'entropy_region_normalized_{num_tta}.pdf', format='pdf', bbox_inches='tight')
+
+plt.show()
+
+print('Working on volume vs original dice score visualization.....')
+
+# Create a figure with two subplots
+fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True)  # Share y-axis for better comparison
+
+# First subplot: Original DSC vs. Actual Volume
+for source, subset in df.groupby("source"):
+    print(source)
+    axes[0].scatter(subset["f1_score"], subset["actual_vol"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')
+    # Calculate Spearman's correlation coefficient
+    correlation, p_value = spearmanr(subset["f1_score"], subset["actual_vol"])
+    # Store values in dictionaries
+    spearman_corr_dict[f"{source} original_dice_vs_actual_vol"] = correlation
+    p_value_dict[f"{source} original_dice_vs_actual_vol"] = p_value
+    for i, row in subset.iterrows():
+        if row["pid"] in maastro_pids_to_annotate and source == "MAASTRO":
+            axes[0].annotate(row["pid"], (row["f1_score"], row["actual_vol"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+        if row["pid"] in ous_pids_to_annotate and source == "OUS":
+            axes[0].annotate(row["pid"], (row["f1_score"], row["actual_vol"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+
+axes[0].set_xlabel("Original DSC")
+axes[0].set_ylabel("Number of GTV voxels in ground truth segmentation")
+axes[0].set_yticks(axes[0].get_yticks())  # Ensure consistent ticks
+axes[0].tick_params(axis="y", rotation=45)
+axes[0].legend()
+axes[0].grid(True, alpha=0.3)
+axes[0].set_xlim(0.0, 1.0)
+
+
+# Second subplot: Mean Cross-DSC vs. Actual Volume
+for source, subset in df.groupby("source"):
+    print(source)
+    axes[1].scatter(subset[f"mean_dice_{num_tta:02d}"], subset["actual_vol"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')
+    # Calculate Spearman's correlation coefficient
+    correlation, p_value = spearmanr(subset[f"mean_dice_{num_tta:02d}"], subset["actual_vol"])
+    # Store values in dictionaries
+    spearman_corr_dict[f"{source} cross_dice_vs_actual_vol"] = correlation
+    p_value_dict[f"{source} cross_dice_vs_actual_vol"] = p_value
+    for i, row in subset.iterrows():
+        if row["pid"] in maastro_pids_to_annotate and source == "MAASTRO":
+            axes[1].annotate(row["pid"], (row[f"mean_dice_{num_tta:02d}"], row["actual_vol"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+        if row["pid"] in ous_pids_to_annotate and source == "OUS":
+            axes[1].annotate(row["pid"], (row[f"mean_dice_{num_tta:02d}"], row["actual_vol"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+
+axes[1].set_xlabel(f"Mean Cross-DSC ({num_tta} TTA)")
+axes[1].legend()
+axes[1].grid(True, alpha=0.3)
+axes[1].set_xlim(0.0, 1.0)
+
+
+
+# Adjust layout and save figure
+plt.tight_layout()
+plt.savefig(f'gtv_volume_vs_dice_{num_tta}.pdf', format='pdf', bbox_inches='tight')
+
+plt.show()
+
+# Convert dictionary to a DataFrame
+results = pd.DataFrame({
+    "Comparison": spearman_corr_dict.keys(),
+    "Spearman_Correlation": spearman_corr_dict.values(),
+    "P-Value": p_value_dict.values()
+})
+
+# Save as a CSV file
+results.to_csv(f"spearman_results_{num_tta}TTA.csv", index=False)
+
+
+
 
 """# Create scatter plot
 plt.figure(figsize=(6, 4))
@@ -180,95 +293,3 @@ plt.tight_layout()
 plt.savefig(f'entropy_region_subplots.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()"""
-
-
-# Create scatter plot
-plt.figure(figsize=(6, 4))
-for source, subset in df.groupby("source"):
-    print(source)
-    plt.scatter(subset["f1_score"], subset["entropy_region_norm"], label=source, color=colors[source])#, alpha=0.7)
-    # Calculate Spearman's correlation coefficient
-    correlation, p_value = spearmanr(subset["f1_score"], subset["entropy_region_norm"])
-    print(f"{source} original_dice_vs_iou: {correlation}, p-value: {p_value}")
-
-    # Store values in dictionaries
-    spearman_corr_dict[f"{source} original_dice_vs_entropy_region_norm"] = correlation
-    p_value_dict[f"{source} original_dice_vs_entropy_region_norm"] = p_value
-    for i, row in subset.iterrows():
-        plt.annotate(row["pid"], (row["f1_score"], row["entropy_region_norm"]), textcoords="offset points", xytext=(1,1), ha="left")
-# Labels and title
-plt.xlabel("Original DSC")
-plt.ylabel("Entropy")
-plt.yticks(rotation=45)
-plt.title("Average entropy level inside the predicted GTV region \n as a function of Original DSC")
-#plt.title("Sum of entropy of predicted class 1 region normalized \n by predicted class 1 volume as a function of Original DSC")
-plt.legend()
-plt.grid(True, alpha=0.3)
-plt.xlim(0.0, 1.0)
-
-
-# Save the plot to a PDF file
-plt.savefig(f'entropy_region_normalized_{num_tta}.pdf', format='pdf', bbox_inches='tight')
-
-plt.show()
-
-print('Working on volume vs original dice score visualization.....')
-
-# Create a figure with two subplots
-fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True)  # Share y-axis for better comparison
-
-# First subplot: Original DSC vs. Actual Volume
-for source, subset in df.groupby("source"):
-    print(source)
-    axes[0].scatter(subset["f1_score"], subset["actual_vol"], label=source, color=colors[source])
-    # Calculate Spearman's correlation coefficient
-    correlation, p_value = spearmanr(subset["f1_score"], subset["actual_vol"])
-    # Store values in dictionaries
-    spearman_corr_dict[f"{source} original_dice_vs_actual_vol"] = correlation
-    p_value_dict[f"{source} original_dice_vs_actual_vol"] = p_value
-    for i, row in subset.iterrows():
-        axes[0].annotate(row["pid"], (row["f1_score"], row["actual_vol"]), textcoords="offset points", xytext=(1,1), ha="left")
-
-axes[0].set_xlabel("Original DSC")
-axes[0].set_ylabel("Number of GTV voxels in ground truth segmentation")
-axes[0].set_yticks(axes[0].get_yticks())  # Ensure consistent ticks
-axes[0].tick_params(axis="y", rotation=45)
-axes[0].legend()
-axes[0].grid(True, alpha=0.3)
-axes[0].set_xlim(0.0, 1.0)
-
-
-# Second subplot: Mean Cross-DSC vs. Actual Volume
-for source, subset in df.groupby("source"):
-    print(source)
-    axes[1].scatter(subset[f"mean_dice_{num_tta:02d}"], subset["actual_vol"], label=source, color=colors[source])
-    # Calculate Spearman's correlation coefficient
-    correlation, p_value = spearmanr(subset[f"mean_dice_{num_tta:02d}"], subset["actual_vol"])
-    # Store values in dictionaries
-    spearman_corr_dict[f"{source} cross_dice_vs_actual_vol"] = correlation
-    p_value_dict[f"{source} cross_dice_vs_actual_vol"] = p_value
-    for i, row in subset.iterrows():
-        axes[1].annotate(row["pid"], (row[f"mean_dice_{num_tta:02d}"], row["actual_vol"]), textcoords="offset points", xytext=(1,1), ha="left")
-
-axes[1].set_xlabel(f"Mean Cross-DSC ({num_tta} TTA)")
-axes[1].legend()
-axes[1].grid(True, alpha=0.3)
-axes[1].set_xlim(0.0, 1.0)
-
-
-
-# Adjust layout and save figure
-plt.tight_layout()
-plt.savefig(f'gtv_volume_vs_dice_{num_tta}.pdf', format='pdf', bbox_inches='tight')
-
-plt.show()
-
-# Convert dictionary to a DataFrame
-results = pd.DataFrame({
-    "Comparison": spearman_corr_dict.keys(),
-    "Spearman_Correlation": spearman_corr_dict.values(),
-    "P-Value": p_value_dict.values()
-})
-
-# Save as a CSV file
-results.to_csv(f"spearman_results_{num_tta}TTA.csv", index=False)
