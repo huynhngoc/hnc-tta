@@ -12,7 +12,7 @@ ous_org = ous_org[ous_org['pid'] != 110]
 ous_org = ous_org[["pid","f1_score"]]
 
 ous_summarize = pd.read_csv(f"OUS_average_{num_tta:02d}.csv")
-ous_summarize = ous_summarize[["pid","entropy_org_pred_region", "actual_vol", "org_predicted_vol"]]
+ous_summarize = ous_summarize[["pid","entropy_org_pred_region", "actual_vol", "org_predicted_vol", "sum_entropy"]]
 
 ous_df = pd.merge(ous_org, ous_summarize, on='pid', how='outer')
 
@@ -30,7 +30,7 @@ maastro_org = pd.read_csv("MAASTRO_original_results.csv")
 maastro_org = maastro_org[["pid","f1_score"]]
 
 maastro_summarize = pd.read_csv(f"MAASTRO_average_{num_tta:02d}.csv")
-maastro_summarize = maastro_summarize[["pid","entropy_org_pred_region", "actual_vol", "org_predicted_vol"]]
+maastro_summarize = maastro_summarize[["pid","entropy_org_pred_region", "actual_vol", "org_predicted_vol", "sum_entropy"]]
 
 maastro_df = pd.merge(maastro_org, maastro_summarize, on='pid', how='outer')
 
@@ -54,10 +54,12 @@ df = pd.concat([ous_df, maastro_df])  # Merge datasets
 df['entropy_region_norm'] = df['entropy_org_pred_region'] / df['org_predicted_vol']
 df = df.dropna(subset=["entropy_region_norm"])
 
+df["avg_entropy"] = df["sum_entropy"] / (173*191*265)
+
 colors = {"OUS": "#d95f02", "MAASTRO": "#7570b3"}
 
-maastro_pids_to_annotate = [69, 23]
-ous_pids_to_annotate = [ 217, 82, 52]
+maastro_pids_to_annotate = [69, 23, 52]
+ous_pids_to_annotate = [ 217, 82]
 
 """print(df.head())
 print(df.tail())
@@ -170,6 +172,42 @@ plt.xlim(0.0, 1.0)
 
 # Save the plot to a PDF file
 plt.savefig(f'entropy_region_normalized_{num_tta}.pdf', format='pdf', bbox_inches='tight')
+
+plt.show()
+
+print('Working on average entropy  vs original dice score visualization.....')
+
+
+# Create scatter plot
+plt.figure(figsize=(6, 4))
+for source, subset in df.groupby("source"):
+    print(source)
+    plt.scatter(subset["f1_score"], subset["avg_entropy"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')#, alpha=0.7)
+    # Calculate Spearman's correlation coefficient
+    correlation, p_value = spearmanr(subset["f1_score"], subset["avg_entropy"])
+    print(f"{source} original_dice_vs_iou: {correlation}, p-value: {p_value}")
+
+    # Store values in dictionaries
+    spearman_corr_dict[f"{source} original_dice_vs_avg_entropy"] = correlation
+    p_value_dict[f"{source} original_dice_vs_avg_entropy"] = p_value
+    for i, row in subset.iterrows():
+        if row["pid"] in maastro_pids_to_annotate and source == "MAASTRO":
+            plt.annotate(row["pid"], (row["f1_score"], row["avg_entropy"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+        if row["pid"] in ous_pids_to_annotate and source == "OUS":
+            plt.annotate(row["pid"], (row["f1_score"], row["avg_entropy"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+# Labels and title
+plt.xlabel("Original DSC")
+plt.ylabel("Entropy")
+plt.yticks(rotation=45)
+plt.title("Average entropy level across all voxels \n as a function of Original DSC")
+#plt.title("Sum of entropy of predicted class 1 region normalized \n by predicted class 1 volume as a function of Original DSC")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.xlim(0.0, 1.0)
+
+
+# Save the plot to a PDF file
+plt.savefig(f'avg_entropy_{num_tta}.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
