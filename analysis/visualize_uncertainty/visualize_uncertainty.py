@@ -379,7 +379,7 @@ num_samples = 15
 patient_id = 82
 uncertainty_map = np.zeros((173, 191, 265, 1))
 
-folder_path = f'/Users/bruker/Desktop/Master/OUS_{patient_id}'
+folder_path = f'/Users/bruker/Desktop/Master/Uncertainty_viz'
 umap_path = os.path.join(folder_path, f'uncertainty_map_pid_{patient_id}.npy')
 image_path = os.path.join(folder_path, f'pid_{patient_id}.npy')
 
