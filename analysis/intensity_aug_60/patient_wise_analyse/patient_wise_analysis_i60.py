@@ -72,7 +72,7 @@ p_value_dict = {}
 
 print('Working on IoU vs original dice score visualization.....')
 # Create scatter plot
-plt.figure(figsize=(6, 4))
+plt.figure(figsize=(5, 3))
 for source, subset in df.groupby("source"):
     print(source)
     plt.scatter(subset["f1_score"], subset["iou"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')#, alpha=0.7)
@@ -91,8 +91,8 @@ for source, subset in df.groupby("source"):
 
   
 # Labels and title
-plt.xlabel("Original DSC")
-plt.ylabel('$IoU_{TTA}$')
+plt.xlabel("Original DSC", fontsize=11)
+plt.ylabel('$IoU_{TTA}$', fontsize=11)
 #plt.title("Scatter Plot of IoU vs. Original Dice Score")
 plt.legend()
 plt.grid(True, alpha=0.3)
@@ -109,7 +109,7 @@ plt.show()
 print('Working on average cross dice score vs original dice score visualization.....')
 
 # Create scatter plot
-plt.figure(figsize=(6, 4))
+plt.figure(figsize=(5, 3))
 for source, subset in df.groupby("source"):
     print(source)
     plt.scatter(subset["f1_score"], subset[f"mean_dice_{num_tta:02d}"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')
@@ -125,8 +125,8 @@ for source, subset in df.groupby("source"):
             plt.annotate(row["pid"], (row["f1_score"], row[f"mean_dice_{num_tta:02d}"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
 
 # Labels and title
-plt.xlabel("Original DSC")
-plt.ylabel(f"Mean Cross-DSC ({num_tta} TTA)")
+plt.xlabel("Original DSC", fontsize=11)
+plt.ylabel(f"Mean Cross-DSC ({num_tta} TTA)", fontsize=11)
 #plt.title("Scatter Plot of Mean Cross Dice Score vs. Original Dice Score")
 plt.legend()
 plt.grid(True, alpha=0.3)
@@ -143,13 +143,12 @@ print('Working on sum entropy predicted region vs original dice score visualizat
 
 
 # Create scatter plot
-plt.figure(figsize=(6, 4))
+plt.figure(figsize=(5, 3))
 for source, subset in df.groupby("source"):
     print(source)
     plt.scatter(subset["f1_score"], subset["entropy_region_norm"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')#, alpha=0.7)
     # Calculate Spearman's correlation coefficient
     correlation, p_value = spearmanr(subset["f1_score"], subset["entropy_region_norm"])
-    print(f"{source} original_dice_vs_iou: {correlation}, p-value: {p_value}")
 
     # Store values in dictionaries
     spearman_corr_dict[f"{source} original_dice_vs_entropy_region_norm"] = correlation
@@ -160,8 +159,8 @@ for source, subset in df.groupby("source"):
         if row["pid"] in ous_pids_to_annotate and source == "OUS":
             plt.annotate(row["pid"], (row["f1_score"], row["entropy_region_norm"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
 # Labels and title
-plt.xlabel("Original DSC")
-plt.ylabel("Entropy")
+plt.xlabel("Original DSC", fontsize=11)
+plt.ylabel("Entropy", fontsize=11)
 plt.yticks(rotation=45)
 plt.title("Average entropy level inside the predicted GTV region \n as a function of Original DSC")
 #plt.title("Sum of entropy of predicted class 1 region normalized \n by predicted class 1 volume as a function of Original DSC")
@@ -179,7 +178,7 @@ print('Working on average entropy  vs original dice score visualization.....')
 
 
 # Create scatter plot
-plt.figure(figsize=(6, 4))
+plt.figure(figsize=(5, 3))
 for source, subset in df.groupby("source"):
     print(source)
     plt.scatter(subset["f1_score"], subset["avg_entropy"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')#, alpha=0.7)
@@ -196,8 +195,8 @@ for source, subset in df.groupby("source"):
         if row["pid"] in ous_pids_to_annotate and source == "OUS":
             plt.annotate(row["pid"], (row["f1_score"], row["avg_entropy"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
 # Labels and title
-plt.xlabel("Original DSC")
-plt.ylabel("Entropy")
+plt.xlabel("Original DSC", fontsize=11)
+plt.ylabel("Entropy", fontsize=11)
 plt.yticks(rotation=45)
 plt.title("Average entropy level across all voxels \n as a function of Original DSC")
 #plt.title("Sum of entropy of predicted class 1 region normalized \n by predicted class 1 volume as a function of Original DSC")
@@ -214,7 +213,7 @@ plt.show()
 print('Working on volume vs original dice score visualization.....')
 
 # Create a figure with two subplots
-fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True)  # Share y-axis for better comparison
+fig, axes = plt.subplots(2, 1, figsize=(5, 6))  # Share y-axis for better comparison
 
 # First subplot: Original DSC vs. Actual Volume
 for source, subset in df.groupby("source"):
@@ -231,13 +230,15 @@ for source, subset in df.groupby("source"):
         if row["pid"] in ous_pids_to_annotate and source == "OUS":
             axes[0].annotate(row["pid"], (row["f1_score"], row["actual_vol"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
 
-axes[0].set_xlabel("Original DSC")
-axes[0].set_ylabel("Number of GTV voxels in ground truth segmentation")
+axes[0].set_xlabel("Original DSC", fontsize=11)
+axes[0].set_ylabel("Number of GTV voxels \n in ground truth segmentation", fontsize=11)
 axes[0].set_yticks(axes[0].get_yticks())  # Ensure consistent ticks
 axes[0].tick_params(axis="y", rotation=45)
 axes[0].legend()
 axes[0].grid(True, alpha=0.3)
 axes[0].set_xlim(0.0, 1.0)
+axes[0].set_ylim(0.0,275000)
+
 
 
 # Second subplot: Mean Cross-DSC vs. Actual Volume
@@ -255,10 +256,15 @@ for source, subset in df.groupby("source"):
         if row["pid"] in ous_pids_to_annotate and source == "OUS":
             axes[1].annotate(row["pid"], (row[f"mean_dice_{num_tta:02d}"], row["actual_vol"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
 
-axes[1].set_xlabel(f"Mean Cross-DSC ({num_tta} TTA)")
+axes[1].set_xlabel(f"Mean Cross-DSC ({num_tta} TTA)", fontsize=11)
+axes[1].set_ylabel("Number of GTV voxels \n in ground truth segmentation", fontsize=11)
+axes[1].tick_params(axis="y", rotation=45)
+axes[1].set_yticks(axes[1].get_yticks())  # Ensure consistent ticks
 axes[1].legend()
 axes[1].grid(True, alpha=0.3)
 axes[1].set_xlim(0.0, 1.0)
+axes[1].set_ylim(0.0,275000)
+
 
 
 
