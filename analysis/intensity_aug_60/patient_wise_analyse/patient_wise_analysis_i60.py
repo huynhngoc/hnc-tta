@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from scipy.stats import spearmanr
-
+from scipy.stats import spearmanr, pearsonr
+from matplotlib.ticker import FuncFormatter
 
 num_tta = 15
 
@@ -72,11 +72,16 @@ p_value_dict = {}
 
 print('Working on IoU vs original dice score visualization.....')
 # Create scatter plot
-plt.figure(figsize=(5, 3))
+plt.figure(figsize=(4, 4))
 for source, subset in df.groupby("source"):
     print(source)
     plt.scatter(subset["f1_score"], subset["iou"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')#, alpha=0.7)
     # Calculate Spearman's correlation coefficient
+    correlation_both, p_value_both = spearmanr(df["f1_score"], df["iou"])
+    spearman_corr_dict["original_dice_vs_iou"] = correlation_both
+    p_value_dict["original_dice_vs_iou"] = p_value_both
+    print(f"original_dice_vs_iou: {correlation_both}, p-value: {p_value_both}")
+
     correlation, p_value = spearmanr(subset["f1_score"], subset["iou"])
     print(f"{source} original_dice_vs_iou: {correlation}, p-value: {p_value}")
     # Store values in dictionaries
@@ -106,14 +111,62 @@ plt.savefig(f'iou_vs_dice_{num_tta}.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
 
+print('Working on IoU vs original dice score cropped visualization.....')
+# Create scatter plot
+plt.figure(figsize=(4, 4))
+for source, subset in df.groupby("source"):
+    print(source)
+    plt.scatter(subset["f1_score"], subset["iou"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')#, alpha=0.7)
+    # Calculate Spearman's correlation coefficient
+    correlation, p_value = spearmanr(subset["f1_score"], subset["iou"])
+    print(f"{source} original_dice_vs_iou: {correlation}, p-value: {p_value}")
+    # Store values in dictionaries
+    spearman_corr_dict[f"{source} original_dice_vs_iou"] = correlation
+    p_value_dict[f"{source} original_dice_vs_iou"] = p_value
+    # Add labels to points
+    for i, row in subset.iterrows():
+        if row["pid"] in maastro_pids_to_annotate and source == "MAASTRO":
+            plt.annotate(row["pid"], (row["f1_score"], row["iou"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+        if row["pid"] in ous_pids_to_annotate and source == "OUS":
+            plt.annotate(row["pid"], (row["f1_score"], row["iou"]), textcoords="offset points", xytext=(1,1), ha="left", fontsize=11, fontweight='bold')
+
+  
+# Labels and title
+plt.xlabel("Original DSC", fontsize=11)
+plt.ylabel('$IoU_{TTA}$', fontsize=11)
+#plt.title("Scatter Plot of IoU vs. Original Dice Score")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.ylim(0.0, 0.2)
+plt.xlim(0.0, 1.0)
+ax = plt.gca()
+ax.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f'{y:.2f}'))
+
+
+# Save the plot to a PDF file
+plt.savefig(f'iou_vs_dice_{num_tta}_zoom.pdf', format='pdf', bbox_inches='tight')
+
+plt.show()
+
 print('Working on average cross dice score vs original dice score visualization.....')
 
 # Create scatter plot
-plt.figure(figsize=(5, 3))
+plt.figure(figsize=(4,4))
 for source, subset in df.groupby("source"):
     print(source)
     plt.scatter(subset["f1_score"], subset[f"mean_dice_{num_tta:02d}"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')
     # Calculate Spearman's correlation coefficient
+    correlation_both, p_value_both = spearmanr(df["f1_score"], df[f"mean_dice_{num_tta:02d}"])
+    spearman_corr_dict[f"original_dice_vs_mean_cross_dice_{num_tta}"] = correlation_both
+    p_value_dict[f"original_dice_vs_mean_cross_dice_{num_tta}"] = p_value_both
+
+    # Calculate Pearson's correlation coefficient
+    correlation_both, p_value_both = pearsonr(df["f1_score"], df[f"mean_dice_{num_tta:02d}"])
+    print(f"Pearsons: original_dice_vs_iou: {correlation_both}, p-value: {p_value_both}")
+
+    #spearman_corr_dict[f"original_dice_vs_mean_cross_dice_{num_tta}"] = correlation_both
+    #p_value_dict[f"original_dice_vs_mean_cross_dice_{num_tta}"] = p_value_both
+
     correlation, p_value = spearmanr(subset["f1_score"], subset[f"mean_dice_{num_tta:02d}"])
     # Store values in dictionaries
     spearman_corr_dict[f"{source} original_dice_vs_mean_cross_dice_{num_tta}"] = correlation
@@ -147,6 +200,14 @@ plt.figure(figsize=(5, 3))
 for source, subset in df.groupby("source"):
     print(source)
     plt.scatter(subset["f1_score"], subset["entropy_region_norm"], label=source, color=colors[source], linewidths=0.2, edgecolors='black')#, alpha=0.7)
+    correlation_both, p_value_both = spearmanr(df["f1_score"], df["entropy_region_norm"])
+    spearman_corr_dict[f"original_dice_vs_entropy_region_norm"] = correlation_both
+    p_value_dict[f"original_dice_vs_entropy_region_norm"] = p_value_both
+    
+    # Calculate Pearson's correlation coefficient
+    correlation_both, p_value_both = pearsonr(df["f1_score"], df["entropy_region_norm"])
+    print(f"Pearsons: original_dice_vs_entropy: {correlation_both}, p-value: {p_value_both}")
+
     # Calculate Spearman's correlation coefficient
     correlation, p_value = spearmanr(subset["f1_score"], subset["entropy_region_norm"])
 
@@ -162,7 +223,7 @@ for source, subset in df.groupby("source"):
 plt.xlabel("Original DSC", fontsize=11)
 plt.ylabel("Entropy", fontsize=11)
 plt.yticks(rotation=45)
-plt.title("Average entropy level inside the predicted GTV region \n as a function of Original DSC")
+#plt.title("Average entropy level inside the predicted GTV region \n as a function of Original DSC")
 #plt.title("Sum of entropy of predicted class 1 region normalized \n by predicted class 1 volume as a function of Original DSC")
 plt.legend()
 plt.grid(True, alpha=0.3)
@@ -173,7 +234,7 @@ plt.xlim(0.0, 1.0)
 plt.savefig(f'entropy_region_normalized_{num_tta}.pdf', format='pdf', bbox_inches='tight')
 
 plt.show()
-
+exit()
 print('Working on average entropy  vs original dice score visualization.....')
 
 
