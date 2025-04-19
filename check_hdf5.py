@@ -12,7 +12,7 @@ file_path = args.source + '/segmentation/' + args.filename
 def print_detail(file_name):
     with h5py.File(file_name, 'r') as f:
         for group in f.keys():
-            print(group, f[group].shape)
+            print(group)
             for ds_name in f[group].keys():
                 print('--', ds_name, f[group][ds_name].shape)
 
