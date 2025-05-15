@@ -4,7 +4,9 @@ import argparse
 import os
 import pandas as pd
 
-
+"""
+This script is used to analyze the effect of using different number of TTA-predictions on the DSC and entropy values.
+"""
 
 parser = argparse.ArgumentParser()
 parser.add_argument("name")

@@ -8,6 +8,9 @@ import pandas as pd
 from deoxys.data.preprocessor import preprocessor_from_config
 import json
 
+"""
+This script is used to print the model summary of a Keras model stored in an HDF5 file.
+"""
 
 parser = argparse.ArgumentParser()
 parser.add_argument("source")

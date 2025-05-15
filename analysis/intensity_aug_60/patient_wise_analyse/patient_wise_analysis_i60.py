@@ -5,6 +5,11 @@ import seaborn as sns
 from scipy.stats import spearmanr, pearsonr
 from matplotlib.ticker import FuncFormatter
 
+
+"""
+This script is used to analyze the relationship between the original DSC and patient-wise uncertainty metrics.
+"""
+
 num_tta = 15
 
 ous_org = pd.read_csv("OUS_original_results.csv")
